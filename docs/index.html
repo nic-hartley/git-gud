@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WASM skeleton</title>
+    <script src="/loader.js"></script>
+    <script>
+      let helloMem = wasm.malloc(256, 256);
+      wasm({
+        path: "/hello.wasm",
+        imports: { env: {
+          memory: helloMem,
+          print: console.log
+        } }
+      }).then(main).catch(console.error);
+
+      function main(cpp) {
+        cpp.print_val(12);
+      }
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
+
