@@ -1,4 +1,7 @@
 #!/bin/bash
+# We need Bash specifically so that emsdk_env.sh works, but once
+# https://github.com/emscripten-core/emsdk/issues/219 is closed that won't be
+# true anymore!
 
 if [ "$(head -n 1 README.md)" != "# git-gud" ]; then
   echo "ERROR! Run build script from the git-gud project root!"
@@ -56,23 +59,50 @@ install_wabt() {
   refresh_wabt
 }
 
-shopt -s extglob
+clean() {
+  echo "Cleaning out to just sources"
+  echo "Deleting compiled things..."
+  rm -r docs/
+  echo "Deleting emcc..."
+  rm -rf emsdk/
+  rm -rf ~/.emscripten*
+  echo "Deleting wabt..."
+  rm -rf wabt/
+}
 
-echo Copying non-compiled resources to docs/
-cp src/*.!(cpp) docs/
-# but not you, lib.js. You're just to get Emscripten not to warn.
-rm docs/lib.js
+build() {
+  echo Copying non-compiled resources to docs/
+  mkdir -p docs
+  cp src/* docs/
+  # but not you, lib.js. You're just to get Emscripten not to warn.
+  rm docs/lib.js
+  # and not the C++ sources, since they're just compiled into the .wasm file
+  rm docs/*.cpp
 
-# Install EMSDK if necessary
-emcc --version >/dev/null 2>&1 || install_emcc
+  # Install EMSDK if necessary
+  emcc --version >/dev/null 2>&1 || install_emcc
 
-echo Compiling src/*.cpp to docs/hello.wasm
-emcc src/*.cpp -O3 -o docs/hello.wasm -s WASM=1 --js-library src/lib.js >/dev/null
+  echo Compiling src/*.cpp to docs/git-gud.wasm
+  emcc src/*.cpp -O3 -o docs/git-gud.wasm -s WASM=1 --js-library src/lib.js >/dev/null
 
-# Install WABT if necessary
-wasm2wat --help >/dev/null 2>&1 || install_wabt
+  # Install WABT if necessary
+  wasm2wat --help >/dev/null 2>&1 || install_wabt
 
-echo Generating WASM text representation
-wasm2wat docs/hello.wasm > docs/hello.wat
+  echo Generating WASM text representation
+  wasm2wat docs/git-gud.wasm >docs/git-gud.wat
 
-echo "Compilation done!"
+  echo "Compilation done!"
+}
+
+if [ -z "$1" ]; then
+  echo "Normal rebuild"
+  build
+elif [ "$1" = "reset" ]; then
+  echo "Resetting to just sources without rebuild"
+  clean
+  echo "Reset complete. Rebuild with $0"
+elif [ "$1" = "full" ]; then
+  echo "Resetting to just sources and rebuilding"
+  clean
+  build
+fi

@@ -6,10 +6,14 @@
     <script>
       let helloMem = wasm.malloc(256, 256);
       wasm({
-        path: "/hello.wasm",
+        path: "/git-gud.wasm",
         imports: { env: {
           memory: helloMem,
-          print: console.log
+          print: (n, i) => {
+            let p = document.createElement("P");
+            p.innerText = `${n}: ${i}`;
+            document.body.appendChild(p);
+          }
         } }
       }).then(main).catch(console.error);
 
