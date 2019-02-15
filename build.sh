@@ -56,6 +56,13 @@ install_wabt() {
   refresh_wabt
 }
 
+shopt -s extglob
+
+echo Copying non-compiled resources to docs/
+cp src/*.!(cpp) docs/
+# but not you, lib.js. You're just to get Emscripten not to warn.
+rm docs/lib.js
+
 # Install EMSDK if necessary
 emcc --version >/dev/null 2>&1 || install_emcc
 
