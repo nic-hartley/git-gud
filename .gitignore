@@ -1,1 +1,6 @@
+# IDE setting stuff
 .vscode/
+
+# Tools (installed locally for ease of use)
+emsdk/
+wabt/
