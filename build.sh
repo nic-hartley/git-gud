@@ -56,17 +56,13 @@ install_wabt() {
   refresh_wabt
 }
 
-echo "Checking if EMCC needs to be installed"
-emcc --version >/dev/null 2>&1
-echo ret $?
+# Install EMSDK if necessary
 emcc --version >/dev/null 2>&1 || install_emcc
 
 echo Compiling src/*.cpp to docs/hello.wasm
 emcc src/*.cpp -O3 -o docs/hello.wasm -s WASM=1 --js-library src/lib.js >/dev/null
 
-echo "Checking if WABT needs to be installed"
-wasm2wat --help >/dev/null 2>&1
-echo ret $?
+# Install WABT if necessary
 wasm2wat --help >/dev/null 2>&1 || install_wabt
 
 echo Generating WASM text representation
