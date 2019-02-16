@@ -6,7 +6,7 @@
     <script>
       let helloMem = wasm.malloc(256, 256);
       wasm({
-        path: "/git-gud.wasm",
+        path: "./git-gud.wasm",
         imports: { env: {
           memory: helloMem,
           print: (n, i) => {
@@ -23,6 +23,9 @@
     </script>
   </head>
   <body>
+    <canvas width="640" height="480">
+      Get a real browser!
+    </canvas>
   </body>
 </html>
 
