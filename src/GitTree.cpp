@@ -99,16 +99,17 @@ void GitTree::addCommitNewBranch(int parentID)
 
 void GitTree::undo()
 {
-	/*
 	if (this->commits.size() <= 1) { return; }
 
 	auto last = getLatest();
+	auto parents = last->getParents();
 
-	for (auto parent : last.getParents())
+	for (auto parent : parents)
 	{
-
+		parent->removeChild(last->getID());
 	}
-	*/
+
+	this->commits.pop_back();
 }
 
 void GitTree::print() const
