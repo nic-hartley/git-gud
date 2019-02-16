@@ -29,12 +29,21 @@ std::shared_ptr<Commit> GitTree::getCommit(int ID) const
 
 std::shared_ptr<Commit> GitTree::getLatest() const
 {
-	return NULL;
+	if (this->commits.empty()) {return NULL;}
+	return this->commits.back();
 }
 
 std::shared_ptr<Commit> GitTree::getLatest(int branchID) const
 {
-	return NULL;
+	std::shared_ptr<Commit> latest = NULL;
+	for (auto ptr : this->commits)
+	{
+		if (ptr->getBranch() == branchID)
+		{
+			latest = ptr;
+		}
+	}
+	return latest;
 }
 
 std::vector<std::shared_ptr<Commit>>& GitTree::getAllCommits()

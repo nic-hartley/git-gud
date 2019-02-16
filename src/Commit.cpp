@@ -23,8 +23,8 @@ int Commit::generateID()
 	return id++;
 }
 
-int Commit::getID() {return this->commitID;}
-int Commit::getBranch() {return this->branchID;}
+int Commit::getID() const {return this->commitID;}
+int Commit::getBranch() const {return this->branchID;}
 
 std::vector<std::shared_ptr<Commit>>& Commit::getParents()
 {
