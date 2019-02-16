@@ -77,7 +77,7 @@ build() {
   # but not you, lib.js. You're just to get Emscripten not to warn.
   rm docs/lib.js
   # and not the C++ sources, since they're just compiled into the .wasm file
-  rm docs/*.cpp
+  rm docs/*.[ch]pp
 
   # Install EMSDK if necessary
   emcc --version >/dev/null 2>&1 || install_emcc

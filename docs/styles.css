@@ -1,4 +1,4 @@
-.input-box-cmd{
+#input-box-cmd{
     background-color: black;
     border: none;
     width: 30%;
@@ -18,9 +18,6 @@
 /*    line-height: 22px;*/
     font-size: 19px;
 }
-input:focus,
-select:focus,
-textarea:focus,
-button:focus {
+input:focus, select:focus, textarea:focus, button:focus {
     outline: none;
 }
