@@ -3,21 +3,31 @@
   <head>
     <title>WASM skeleton</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="./loader.js"></script>
   </head>
   <body>
     <h1> Git</h1>
     <canvas width="640" height="480">
       Get a real browser!
     </canvas>
-    <form id="command-prompt" autocomplete="off">
-      <span class="locked-text"> &gt;&nbsp;git&nbsp;</span><input type="text" class="input-box-cmd" name="cmd" />
+    <p id="history">crr</p>
+    <form id="command-prompt" autocomplete="off" spellcheck="false">
+      <span class="locked-text"> &gt;&nbsp;git&nbsp;</span><input type="text" id="input-box-cmd" onkeypress="return noenter(), hist()"/>
 <!--        <input type="submit" value="Go"/>-->
 <!--         <textarea name="Text1" cols="40" rows="5" value=" > git "></textarea> -->
     </form>
 
+    <script src="./loader.js"></script>
     <script src="./api.js"></script>
     <script>
+      function noenter() {
+        return !(window.event && window.event.keyCode == 13); 
+      }
+      function hist(){
+        var x = document.getElementById("input-box-cmd").value;
+        console.log(x);
+        document.getElementById("history").innerHTML = x;
+        return x;
+      }
     </script>
   </body>
 </html>

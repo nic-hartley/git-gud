@@ -66,15 +66,17 @@ int GitTree::getNumCommits() const
 	return this->commits.size();
 }
 
-void GitTree::addCommit()
+std::shared_ptr<Commit> GitTree::addCommit()
 {
 	auto commit = std::make_shared<Commit>(generateBranchID());
 
 	this->commits.push_back(commit);
 	this->numBranches++;
+
+	return commit;
 }
 
-void GitTree::addCommit(int parentID)
+std::shared_ptr<Commit> GitTree::addCommit(int parentID)
 {
 	auto parent = getCommit(parentID);
 	auto commit = std::make_shared<Commit>(parent->getBranch());
@@ -83,9 +85,11 @@ void GitTree::addCommit(int parentID)
 	parent->addChild(commit);
 
 	this->commits.push_back(commit);
+
+	return commit;
 }
 
-void GitTree::addCommitNewBranch(int parentID)
+std::shared_ptr<Commit> GitTree::addCommitNewBranch(int parentID)
 {
 	auto parent = getCommit(parentID);
 	auto commit = std::make_shared<Commit>(generateBranchID());
@@ -95,20 +99,23 @@ void GitTree::addCommitNewBranch(int parentID)
 
 	this->commits.push_back(commit);
 	this->numBranches++;
+
+	return commit;
 }
 
 void GitTree::undo()
 {
-	/*
 	if (this->commits.size() <= 1) { return; }
 
 	auto last = getLatest();
+	auto parents = last->getParents();
 
-	for (auto parent : last.getParents())
+	for (auto parent : parents)
 	{
-
+		parent->removeChild(last->getID());
 	}
-	*/
+
+	this->commits.pop_back();
 }
 
 void GitTree::print() const
