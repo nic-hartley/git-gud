@@ -7,7 +7,7 @@
     <script>
       let helloMem = wasm.malloc(256, 256);
       wasm({
-        path: "/git-gud.wasm",
+        path: "./git-gud.wasm",
         imports: { env: {
           memory: helloMem,
           print: (n, i) => {
@@ -25,6 +25,9 @@
   </head>
   <body>
      <h1> Git</h1>
+    <canvas width="640" height="480">
+      Get a real browser!
+    </canvas>
      <form id="command-prompt" autocomplete="off">
         <span class="locked-text"> &gt;&nbsp;git&nbsp;</span><input type="text" class="input-box-cmd" name="cmd" />
 <!--        <input type="submit" value="Go"/>-->
