@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <map>
 
 namespace git_gud
 {
@@ -66,6 +67,7 @@ namespace git_gud
 	{
 		private:
 
+			std::shared_ptr<Commit> head;
 			std::vector<std::shared_ptr<Commit> > commits;
 			int numBranches = 0;
 
@@ -75,8 +77,8 @@ namespace git_gud
 
 			GitTree();
 
+			std::shared_ptr<Commit> getHead() const;
 			std::shared_ptr<Commit> getCommit(int ID) const;
-
 			std::shared_ptr<Commit> getLatest() const;
 			std::shared_ptr<Commit> getLatest(int branchID) const;
 
@@ -85,13 +87,38 @@ namespace git_gud
 			int getNumCommits() const;
 
 			/**
-			 * Generates a new Commit on a new Branch, with no parents.
+			 * Generates a new Commit as a child of the head.
+			 * Checks out the new Commit.
 			 *
-			 * @param Returns the generated Commit.
+			 * @return Returns the generated Commit.
 			 */
 			std::shared_ptr<Commit> addCommit();
+
+			/**
+			 * Generates a new Commit as a child of the specified parent,
+			 * on the same branch. Checks out the new Commit.
+			 */
 			std::shared_ptr<Commit> addCommit(int parentID);
+
+			/**
+			 * Generates a new Commit as a child of the specified parent,
+			 * on a new branch.
+			 */
 			std::shared_ptr<Commit> addCommitNewBranch(int parentID);
+
+			/**
+			 * Sets the head of the tree.
+			 *
+			 * @param commitID ID of the commit to set as the head.
+			 */
+			void checkout(int commitID);
+
+			/**
+			 * Sets the head of the tree.
+			 *
+			 * @param Commit to set.
+			 */
+			void checkout(std::shared_ptr<Commit> commit);
 
 			/**
 			 * Removes the last Commit from the tree. If there is

@@ -1,5 +1,6 @@
 #include "git-gud.hpp"
 
+#include <iostream>
 #include <memory>
 #include <vector>
 #include <stdexcept>
@@ -8,7 +9,9 @@ using namespace git_gud;
 
 GitTree::GitTree()
 {
-	addCommit();
+	auto firstCommit = std::make_shared<Commit>(generateBranchID());
+	this->commits.push_back(firstCommit);
+	this->head = firstCommit;
 }
 
 int GitTree::generateBranchID()
@@ -30,6 +33,11 @@ std::shared_ptr<Commit> GitTree::getCommit(int ID) const
 
 	// The ID didn't exist!
 	throw std::invalid_argument("ID not found!");
+}
+
+std::shared_ptr<Commit> GitTree::getHead() const
+{
+	return this->head;
 }
 
 std::shared_ptr<Commit> GitTree::getLatest() const
@@ -68,12 +76,8 @@ int GitTree::getNumCommits() const
 
 std::shared_ptr<Commit> GitTree::addCommit()
 {
-	auto commit = std::make_shared<Commit>(generateBranchID());
-
-	this->commits.push_back(commit);
-	this->numBranches++;
-
-	return commit;
+	int parent = this->head->getID();
+	return addCommit(parent);
 }
 
 std::shared_ptr<Commit> GitTree::addCommit(int parentID)
@@ -84,6 +88,7 @@ std::shared_ptr<Commit> GitTree::addCommit(int parentID)
 	commit->addParent(parent);
 	parent->addChild(commit);
 
+	checkout(commit);
 	this->commits.push_back(commit);
 
 	return commit;
@@ -97,10 +102,29 @@ std::shared_ptr<Commit> GitTree::addCommitNewBranch(int parentID)
 	commit->addParent(parent);
 	parent->addChild(commit);
 
+	checkout(commit);
 	this->commits.push_back(commit);
 	this->numBranches++;
 
 	return commit;
+}
+
+void GitTree::checkout(int commitID)
+{
+	for (auto ptr : this->commits)
+	{
+		if (ptr->getID() == commitID)
+		{
+			checkout(ptr);
+		}
+	}
+
+	throw std::invalid_argument("Invalid head!");
+}
+
+void GitTree::checkout(std::shared_ptr<Commit> commit)
+{
+	this->head = commit;
 }
 
 void GitTree::undo()
@@ -108,6 +132,13 @@ void GitTree::undo()
 	if (this->commits.size() <= 1) { return; }
 
 	auto last = getLatest();
+	this->commits.pop_back();
+
+	if (this->head = last)
+	{
+		this->head = getLatest();
+	}
+
 	auto parents = last->getParents();
 
 	for (auto parent : parents)
@@ -120,5 +151,12 @@ void GitTree::undo()
 
 void GitTree::print() const
 {
-	for (auto ptr : this->commits) {ptr->print();}
+	for (auto ptr : this->commits) {
+
+		if (this->head == ptr)
+		{
+			std::cout << "HEAD\n";
+		}
+		ptr->print();
+	}
 }
