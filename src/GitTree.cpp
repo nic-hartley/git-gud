@@ -109,6 +109,25 @@ std::shared_ptr<Commit> GitTree::addCommitNewBranch(int parentID)
 	return commit;
 }
 
+std::shared_ptr<Commit> GitTree::merge(int otherID)
+{
+	return merge(this->head->getID(), otherID);
+}
+
+std::shared_ptr<Commit> GitTree::merge(int parent1ID, int parent2ID)
+{
+	// Connect it to the merging parent
+	auto primaryParent = getCommit(parent1ID);
+	auto otherParent = getCommit(parent2ID);
+
+	auto child = addCommit(primaryParent->getID());
+
+	child->addParent(otherParent);
+	otherParent->addChild(child);
+
+	return child;
+}
+
 void GitTree::checkout(int commitID)
 {
 	for (auto ptr : this->commits)

@@ -121,6 +121,25 @@ namespace git_gud
 			void checkout(std::shared_ptr<Commit> commit);
 
 			/**
+			 * Creates a new commit, appended to the head and with
+			 * the given commit as its other parent.
+			 *
+			 * @param otherID ID of the commit to merge into the head.
+			 * @return Returns the new Commit.
+			 */
+			std::shared_ptr<Commit> merge(int otherID);
+
+			/**
+			 * Creates a new commit, appended to the parentID and
+			 * merged with the other.
+			 *
+			 * @param parentID ID of the parent to merge onto.
+			 * @param otherID ID of the brange to merge from.
+			 * @return Return's the newly created commit.
+			 */
+			std::shared_ptr<Commit> merge(int parentID, int otherID);
+
+			/**
 			 * Removes the last Commit from the tree. If there is
 			 * only one node, do nothing.
 			 */
