@@ -83,7 +83,7 @@ build() {
   emcc --version >/dev/null 2>&1 || install_emcc
 
   echo Compiling src/*.cpp to docs/git-gud.wasm
-  emcc src/*.cpp -O3 -o docs/git-gud.wasm -s WASM=1 --js-library src/lib.js >/dev/null
+  emcc src/*.cpp -O3 -o docs/git-gud.js -std=c++11 -s WASM=1 --js-library src/lib.js >/dev/null
 
   # Install WABT if necessary
   wasm2wat --help >/dev/null 2>&1 || install_wabt

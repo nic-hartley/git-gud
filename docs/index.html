@@ -18,8 +18,9 @@
 
     <script src="./api.js"></script>
     <script>
-      document.querySelector("#command-prompt").onsubmit = function(event){
+      document.querySelector("#command-prompt").onsubmit = function(event) {
         event.preventDefault();
+        event.target.reset();
         console.log("Command entered:", document.querySelector(".input-box-cmd").value);
       };
     </script>
