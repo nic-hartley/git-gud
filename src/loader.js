@@ -25,7 +25,9 @@ function wasm(...files) {
       }
     }
     return fetched.then(r =>
-      WebAssembly.instantiateStreaming(r, file.imports)
+      r.arrayBuffer()
+    ).then(bytes =>
+      WebAssembly.instantiate(bytes, file.imports)
     ).then(r => r.instance.exports);
   }
 
