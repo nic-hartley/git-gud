@@ -6,6 +6,11 @@
 
 using namespace git_gud;
 
+GitTree::GitTree()
+{
+	addCommit();
+}
+
 int GitTree::generateBranchID()
 {
 	static int ID = 0;
@@ -46,7 +51,7 @@ std::shared_ptr<Commit> GitTree::getLatest(int branchID) const
 	return latest;
 }
 
-std::vector<std::shared_ptr<Commit>>& GitTree::getAllCommits()
+std::vector<std::shared_ptr<Commit> >& GitTree::getAllCommits()
 {
 	return this->commits;
 }
@@ -54,6 +59,19 @@ std::vector<std::shared_ptr<Commit>>& GitTree::getAllCommits()
 int GitTree::getNumBranches() const
 {
 	return this->numBranches;
+}
+
+int GitTree::getNumCommits() const
+{
+	return this->commits.size();
+}
+
+void GitTree::addCommit()
+{
+	auto commit = std::make_shared<Commit>(generateBranchID());
+
+	this->commits.push_back(commit);
+	this->numBranches++;
 }
 
 void GitTree::addCommit(int parentID)
@@ -76,4 +94,24 @@ void GitTree::addCommitNewBranch(int parentID)
 	parent->addChild(commit);
 
 	this->commits.push_back(commit);
+	this->numBranches++;
+}
+
+void GitTree::undo()
+{
+	/*
+	if (this->commits.size() <= 1) { return; }
+
+	auto last = getLatest();
+
+	for (auto parent : last.getParents())
+	{
+
+	}
+	*/
+}
+
+void GitTree::print() const
+{
+	for (auto ptr : this->commits) {ptr->print();}
 }
