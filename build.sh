@@ -44,7 +44,7 @@ refresh_wabt() {
 
 install_wabt() {
   refresh_wabt && return 0
-  cmake --version || echo "You need CMake to install wabt! Talk to Nic."
+  cmake --version || (echo "You need CMake to install wabt! Talk to Nic." && exit 1)
   echo "Failed to reload wabt, so we need to reinstall"
   echo "Downloading..."
   git clone --recursive https://github.com/WebAssembly/wabt >/dev/null 2>&1
