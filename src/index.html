@@ -2,12 +2,19 @@
 <html>
   <head>
     <title>WASM skeleton</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="./loader.js"></script>
   </head>
   <body>
+    <h1> Git</h1>
     <canvas width="640" height="480">
       Get a real browser!
     </canvas>
+    <form id="command-prompt" autocomplete="off">
+      <span class="locked-text"> &gt;&nbsp;git&nbsp;</span><input type="text" class="input-box-cmd" name="cmd" />
+<!--        <input type="submit" value="Go"/>-->
+<!--         <textarea name="Text1" cols="40" rows="5" value=" > git "></textarea> -->
+    </form>
 
     <script>
       let canvas = document.querySelector("canvas");
@@ -72,4 +79,3 @@
     </script>
   </body>
 </html>
-
