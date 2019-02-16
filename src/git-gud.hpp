@@ -1,6 +1,7 @@
 #ifndef GIT_GUD_HPP
 #define GIT_GUD_HPP
 
+#include <memory>
 #include <vector>
 
 namespace git_gud
@@ -14,8 +15,8 @@ namespace git_gud
 			int commitID;
 			int branchID;
 
-			std::vector<Commit> parents;
-			std::vector<Commit> children;
+			std::vector<std::shared_ptr<Commit>> parents;
+			std::vector<std::shared_ptr<Commit>> children;
 
 			int generateID();
 
@@ -25,12 +26,13 @@ namespace git_gud
 
 			int getID();
 			int getBranch();
-			std::vector<Commit> getParents();
-			std::vector<Commit> getChildren();
+			std::vector<std::shared_ptr<Commit>>& getParents();
+			std::vector<std::shared_ptr<Commit>>& getChildren();
 
-			void addParent(Commit parent);
-			void addChild(Commit child);
+			void addParent(std::shared_ptr<Commit> parent);
+			void addChild(std::shared_ptr<Commit> child);
 
+			// not implemented
 			bool removeParent(int id);
 			bool removeChild(int id);
 	};
@@ -39,7 +41,7 @@ namespace git_gud
 	{
 		private:
 
-			std::vector<Commit> commits;
+			std::vector<std::shared_ptr<Commit>> commits;
 			int numBranches = 0;
 
 			int generateBranchID();
@@ -48,10 +50,13 @@ namespace git_gud
 
 			GitTree();
 
-			Commit getLatest();
-			Commit getLatest(int branchID);
-			std::vector<Commit> getAllCommits();
-			int getNumBranches();
+			std::shared_ptr<Commit> getCommit(int ID) const;
+
+			std::shared_ptr<Commit> getLatest() const;
+			std::shared_ptr<Commit> getLatest(int branchID) const;
+
+			std::vector<std::shared_ptr<Commit>>& getAllCommits();
+			int getNumBranches() const;
 
 			void addCommit(int parentID);
 			void addCommitNewBranch(int parentID);

@@ -1,5 +1,6 @@
 #include "git-gud.hpp"
 
+#include <memory>
 #include <vector>
 
 using namespace git_gud;
@@ -25,8 +26,22 @@ int Commit::generateID()
 int Commit::getID() {return this->commitID;}
 int Commit::getBranch() {return this->branchID;}
 
-std::vector<Commit> Commit::getParents() {return this->parents;}
-std::vector<Commit> Commit::getChildren() {return this->children;}
+std::vector<std::shared_ptr<Commit>>& Commit::getParents()
+{
+	return this->parents;
+}
 
-void Commit::addParent(Commit parent) {this->parents.push_back(parent);}
-void Commit::addChild(Commit child) {this->children.push_back(child);}
+std::vector<std::shared_ptr<Commit>>& Commit::getChildren()
+{
+	return this->children;
+}
+
+void Commit::addParent(std::shared_ptr<Commit> parent)
+{
+	this->parents.push_back(parent);
+}
+
+void Commit::addChild(std::shared_ptr<Commit> child)
+{
+	this->children.push_back(child);
+}
