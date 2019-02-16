@@ -16,6 +16,7 @@
 <!--         <textarea name="Text1" cols="40" rows="5" value=" > git "></textarea> -->
     </form>
 
+    <script src="./api.js"></script>
     <script>
       let canvas = document.querySelector("canvas");
       let ctx = canvas.getContext('2d');
@@ -76,6 +77,11 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         cpp.draw();
       }
+      document.querySelector("#command-prompt").onsubmit = function(event) {
+        event.preventDefault();
+        event.target.reset();
+        console.log("Command entered:", document.querySelector(".input-box-cmd").value);
+      };
       function noenter() {
         return !(window.event && window.event.keyCode == 13); 
       }

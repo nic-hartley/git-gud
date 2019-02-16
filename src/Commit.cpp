@@ -1,5 +1,6 @@
 #include "git-gud.hpp"
 
+#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -26,12 +27,12 @@ int Commit::generateID()
 int Commit::getID() const {return this->commitID;}
 int Commit::getBranch() const {return this->branchID;}
 
-std::vector<std::shared_ptr<Commit>>& Commit::getParents()
+std::vector<std::shared_ptr<Commit> >& Commit::getParents()
 {
 	return this->parents;
 }
 
-std::vector<std::shared_ptr<Commit>>& Commit::getChildren()
+std::vector<std::shared_ptr<Commit> >& Commit::getChildren()
 {
 	return this->children;
 }
@@ -44,4 +45,54 @@ void Commit::addParent(std::shared_ptr<Commit> parent)
 void Commit::addChild(std::shared_ptr<Commit> child)
 {
 	this->children.push_back(child);
+}
+
+void Commit::removeParent(int id)
+{
+	int index = -1;
+	for (auto ptr : this->parents)
+	{
+		index++;
+		if (ptr->getID() == id)
+		{
+			break;
+		}
+	}
+
+	if (index == -1)
+	{
+		throw std::invalid_argument("Cannot find ID!");
+	}
+
+	this->parents.erase(this->parents.begin() + index);
+}
+
+void Commit::removeChild(int id)
+{
+	int index = -1;
+	for (auto ptr : this->children)
+	{
+		index++;
+		if (ptr->getID() == id)
+		{
+			break;
+		}
+	}
+
+	if (index == -1)
+	{
+		throw std::invalid_argument("Cannot find ID!");
+	}
+
+	this->children.erase(this->children.begin() + index);
+}
+
+void Commit::print()
+{
+	std::cout << "ID: " << getID() << ", Branch: " << getBranch() << "\n";
+	std::cout << "Parents: ";
+	for (auto p : getParents()) {std::cout << p->getID() << ", ";}
+	std::cout << "\nChildren: ";
+	for (auto c : getChildren()) {std::cout << c->getID() << ", ";}
+	std::cout << "\n";
 }

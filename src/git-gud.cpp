@@ -11,8 +11,11 @@ extern "C" {
     draw_commit_circle(1, 4, "blue");
     draw_commit_circle(2, 2, "red");
     draw_commit_circle(3, 3, "green");
+    draw_commit_circle(3, 5, "magenta");
     connect_circles(2, 2, 3, 3);
     connect_circles(2, 2, 1, 4);
+    connect_circles(3, 3, 3, 5);
+
     print("after");
   }
 }
