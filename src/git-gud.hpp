@@ -84,9 +84,14 @@ namespace git_gud
 			int getNumBranches() const;
 			int getNumCommits() const;
 
-			void addCommit();
-			void addCommit(int parentID);
-			void addCommitNewBranch(int parentID);
+			/**
+			 * Generates a new Commit on a new Branch, with no parents.
+			 *
+			 * @param Returns the generated Commit.
+			 */
+			std::shared_ptr<Commit> addCommit();
+			std::shared_ptr<Commit> addCommit(int parentID);
+			std::shared_ptr<Commit> addCommitNewBranch(int parentID);
 
 			/**
 			 * Removes the last Commit from the tree. If there is
