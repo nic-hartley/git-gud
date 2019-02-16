@@ -1,12 +1,18 @@
 #include "emscripten.h"
 
 extern "C" {
-  extern void print(int num, int val);
+  extern void print(const char* message);
+  extern void draw_commit_circle(int x, int y, const char* color);
+  extern void connect_circles(int tx, int ty, int bx, int by);
 
   EMSCRIPTEN_KEEPALIVE
-  void print_val(int num) {
-    print(1, num);
-    print(2, 100);
-    print(3, num * 2);
+  void draw() {
+    print("before");
+    draw_commit_circle(1, 4, "blue");
+    draw_commit_circle(2, 2, "red");
+    draw_commit_circle(3, 3, "green");
+    connect_circles(2, 2, 3, 3);
+    connect_circles(2, 2, 1, 4);
+    print("after");
   }
 }

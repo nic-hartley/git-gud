@@ -1,6 +1,6 @@
 // The functions that we expect the JavaScript side to provide
 let e = [
-  "print"
+  'draw_commit_circle', 'connect_circles', 'print'
 ]
 
 // tell Emscripten to make room for those:
