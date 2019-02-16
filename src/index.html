@@ -10,8 +10,8 @@
     <canvas width="640" height="480">
       Get a real browser!
     </canvas>
-    <form id="command-prompt" autocomplete="off">
-      <span class="locked-text"> &gt;&nbsp;git&nbsp;</span><input type="text" class="input-box-cmd" name="cmd" />
+    <form id="command-prompt" autocomplete="off" spellcheck="false">
+      <span class="locked-text"> &gt;&nbsp;git&nbsp;</span><input type="text" class="input-box-cmd" name="cmd" onkeypress="return noenter()"/>
 <!--        <input type="submit" value="Go"/>-->
 <!--         <textarea name="Text1" cols="40" rows="5" value=" > git "></textarea> -->
     </form>
@@ -75,6 +75,9 @@
       function main(cpp) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         cpp.draw();
+      }
+      function noenter() {
+        return !(window.event && window.event.keyCode == 13); 
       }
     </script>
   </body>

@@ -56,9 +56,3 @@ wasm.malloc = function(pages, maxPages) {
 }
 
 console.log("WASMload v0.0.1 loaded");
-
-$("#command-prompt input[type='submit']").click(function(event){
-    event.preventDefault();
-    var value = $("#command-prompt input[type='text']").val();
-    window.location.pathname = "/" + value + ".html";
-});
