@@ -44,37 +44,31 @@ extern "C" {
   
   EMSCRIPTEN_KEEPALIVE
   void init() {
-    print("init");
     tree.reset();
   }
 
   EMSCRIPTEN_KEEPALIVE
   void commit() {
-    print("commit");
     tree.addCommit();
   }
 
   EMSCRIPTEN_KEEPALIVE
   void branch() {
-    print("branch");
     tree.branch();
   }
 
   EMSCRIPTEN_KEEPALIVE
   void merge(int branch) {
-    print("merge");
     tree.merge(branch);
   }
 
   EMSCRIPTEN_KEEPALIVE
   void checkout_branch(int branch) {
-    print("checkout_branch");
     tree.checkout(branch);
   }
 
   EMSCRIPTEN_KEEPALIVE
   void checkout_commit(int commit) {
-    print("checkout_commit");
     tree.checkoutCommit(commit);
   }
 }
