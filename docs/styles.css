@@ -50,6 +50,10 @@ input:focus {
   background-color: black;
 }
 
+#controls {
+  border-top: 1px solid #FFB000;
+}
+
 #canvas, #controls {
   display: block;
 }
