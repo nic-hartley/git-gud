@@ -18,10 +18,9 @@ canvas.onmousemove = e => {
   if (!dragging) return;
   mx += e.x - lastMouseX;
   my += e.y - lastMouseY;
-  console.log('mx', mx);
-  console.log('my', my);
   lastMouseX = e.x;
   lastMouseY = e.y;
+  Module._draw();
 }
 
 function centerX(x) { return x * COL_WIDTH + CIRCLE_RADIUS + HORIZ_MARGIN; }
