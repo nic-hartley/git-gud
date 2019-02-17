@@ -10,7 +10,19 @@
     </canvas>
     <div id="controls">
       <div id="histories">
-        <ul id="githist"></ul><ul id="history"></ul>
+        <ul id="githist">
+          <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+          <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+          <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+          <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+          <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+        </ul><ul id="history">
+          <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+          <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+          <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+          <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+          <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+        </ul>
       </div>
       <div id="textenter">
         <span id="locked-text">&gt;&nbsp;git&nbsp;</span><input id="input-box-cmd" autocomplete="off" spellcheck="false" autofocus="autofocus" type="text" maxlength="32" />
@@ -23,6 +35,7 @@
     <script>
       const HISTORY = document.getElementById("history");
       const GIT_PREF = document.getElementById("githist");
+      const PROMPT = document.getElementById("locked-text");
       const INPUT = document.getElementById("input-box-cmd");
       const CANVAS = document.getElementById("canvas");
       const CONTROLS = document.getElementById("controls");
@@ -40,7 +53,7 @@
         hLI.innerHTML = text;
         HISTORY.appendChild(hLI);
         let gLI = document.createElement("LI");
-        gLI.innerHTML = prefix ? "&nbsp;&nbsp;git&nbsp;" : "&nbsp;";
+        gLI.innerHTML = prefix || "&nbsp;";
         GIT_PREF.appendChild(gLI);
         if (HISTORY.children.length > 5) {
           HISTORY.removeChild(HISTORY.children[0]);
@@ -48,15 +61,29 @@
         }
       }
 
+      let initConfirm = false;
       INPUT.onkeydown = e => {
         if (e.keyCode !== 13) return true;
-        let command = INPUT.value;
+        let command = INPUT.value.toLowerCase();
         INPUT.value = "";
-        addToHistory(command, true);
+        addToHistory(command, initConfirm ? false : "git&nbsp;");
 
         let split = command.split(' ');
-        if (split[0] == "init") {
-
+        if (initConfirm) {
+          if (command == 'y') {
+            init();
+            PROMPT.innerHTML = "> git&nbsp;";
+            initConfirm = false;
+          } else if (command == 'n') {
+            PROMPT.innerHTML = "> git&nbsp;";
+            initConfirm = false;
+          } else {
+            addToHistory("<span style='color:white'>Please enter either 'y' or 'n'.</span>", "y/n&nbsp;");
+          }
+        } else if (split[0] == "init") {
+          addToHistory("<span style='color:white'>This will reset your tree. Are you sure?</span>", "y/n&nbsp;");
+          PROMPT.innerHTML = "[y/n]&nbsp;";
+          initConfirm = true;
         } else if (split[0] == "commit") {
           commit();
         } else if (split[0] == "branch") {
@@ -66,7 +93,7 @@
         } else if (split[0] == "checkout") {
           checkout(split[1]);
         } else {
-          addToHistory("<span style='color:red'>Invalid command!</span>", false);
+          addToHistory("<span style='color:red'>Invalid command!</span>");
         }
 
         e.preventDefault(); return false;
