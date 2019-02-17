@@ -41,6 +41,11 @@ std::shared_ptr<Commit> GitTree::getHead() const
 	return this->head;
 }
 
+int GitTree::getCurrentBranch() const
+{
+  return this->currentBranch;
+}
+
 bool GitTree::isHead(int commitID) const
 {
 	return this->head->getID() == commitID;
@@ -227,12 +232,14 @@ void GitTree::undo()
 void GitTree::reset()
 {
 	this->commits.clear();
+  this->branch_heads.clear();
 	this->nextCommitID = 0;
 	this->nextBranchID = 0;
 
 	auto firstCommit = std::make_shared<Commit>(nextBranchID++, nextCommitID++);
 	this->commits.push_back(firstCommit);
 	this->head = firstCommit;
+  this->branch_heads.push_back(this->head);
 	this->numBranches = 1;
 }
 
