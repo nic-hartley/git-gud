@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>WASM skeleton</title>
+    <title>Git Gud</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -9,7 +9,9 @@
       Get a real browser!
     </canvas>
     <div id="controls">
-      <ul id="history"></ul>
+      <div id="histories">
+        <ul id="githist"></ul><ul id="history"></ul>
+      </div>
       <div id="textenter">
         <span id="locked-text">&gt;&nbsp;git&nbsp;</span><input id="input-box-cmd" autocomplete="off" spellcheck="false" autofocus="autofocus" type="text" maxlength="32" />
       </div>
@@ -17,10 +19,10 @@
     
     <script src="./git-gud.js"></script>
     <script src="./api.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
     <script>
       const HISTORY = document.getElementById("history");
+      const GIT_PREF = document.getElementById("githist");
       const INPUT = document.getElementById("input-box-cmd");
       const CANVAS = document.getElementById("canvas");
       const CONTROLS = document.getElementById("controls");
@@ -33,12 +35,16 @@
       });
       window.dispatchEvent(new FocusEvent("resize"));
 
-      function addToHistory(text) {
-        let li = document.createElement("LI");
-        li.innerHTML = text;
-        HISTORY.appendChild(li);
+      function addToHistory(text, prefix) {
+        let hLI = document.createElement("LI");
+        hLI.innerHTML = text;
+        HISTORY.appendChild(hLI);
+        let gLI = document.createElement("LI");
+        gLI.innerHTML = prefix ? "&nbsp;&nbsp;git&nbsp;" : "&nbsp;";
+        GIT_PREF.appendChild(gLI);
         if (HISTORY.children.length > 5) {
           HISTORY.removeChild(HISTORY.children[0]);
+          GIT_PREF.removeChild(GIT_PREF.children[0]);
         }
       }
 
@@ -46,7 +52,7 @@
         if (e.keyCode !== 13) return true;
         let command = INPUT.value;
         INPUT.value = "";
-        addToHistory(command);
+        addToHistory(command, true);
 
         let split = command.split(' ');
         if (split[0] == "init") {
@@ -60,7 +66,7 @@
         } else if (split[0] == "checkout") {
           checkout(split[1]);
         } else {
-          addToHistory("<span style='color:red'>Invalid command!</span>");
+          addToHistory("<span style='color:red'>Invalid command!</span>", false);
         }
 
         e.preventDefault(); return false;

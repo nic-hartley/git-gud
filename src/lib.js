@@ -139,6 +139,7 @@ mergeInto(LibraryManager.library, {
 
   main_done: function() {
     Module._draw();
+    window.addEventListener('resize', Module._draw);
   },
 
   print: function(what) {
