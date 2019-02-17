@@ -29,7 +29,6 @@
 
       window.addEventListener('resize', _ => {
         CANVAS.width = window.innerWidth;
-        console.log("heights", CONTROLS.clientHeight, window.innerHeight);
         CANVAS.height = window.innerHeight - CONTROLS.clientHeight;
       });
       window.dispatchEvent(new FocusEvent("resize"));
