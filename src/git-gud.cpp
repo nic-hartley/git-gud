@@ -13,27 +13,6 @@ extern "C" {
 git_gud::GitTree tree;
 
 int main() {
-  tree.addCommit();
-  tree.branch();
-  tree.checkout(1);
-  tree.addCommit();
-  tree.branch();
-  tree.checkout(2);
-  tree.addCommit();
-  tree.addCommit();
-  tree.checkout(0);
-  tree.addCommit();
-  tree.merge(1);
-  tree.branch();
-  tree.addCommit();
-  tree.checkout(3);
-  tree.addCommit();
-  tree.checkout(1);
-  tree.merge(3);
-  tree.checkout(0);
-  tree.merge(2);
-  tree.merge(1);
-
   main_done();
 }
 
