@@ -28,6 +28,22 @@ int Commit::getID() const {return this->commitID;}
 int Commit::getBranch() const {return this->branchID;}
 int Commit::getNumParents() const {return this->parents.size();}
 int Commit::getNumChildren() const {return this->children.size();}
+bool Commit::isMergeCommit() const {return getNumParents() >= 2;}
+bool Commit::isNewBranch() const
+{
+	if (isMergeCommit()) {return false;}
+	if (getNumParents() == 0) {return true;}
+	else
+	{
+		auto parent = this->parents[0];
+		if (parent->getBranch() != this->getBranch())
+		{
+			return true;
+		}
+
+		return false;
+	}
+}
 
 std::vector<std::shared_ptr<Commit> >& Commit::getParents()
 {

@@ -52,6 +52,8 @@ namespace git_gud
 			int getBranch() const;
 			int getNumParents() const;
 			int getNumChildren() const;
+			bool isMergeCommit() const;
+			bool isNewBranch() const;
 
 			std::vector<std::shared_ptr<Commit> >& getParents();
 			std::vector<std::shared_ptr<Commit> >& getChildren();

@@ -183,10 +183,11 @@ void GitTree::undo()
 	// If the head is at the undone commit, move it to the previous commit
 	if (this->head->getID() == last->getID())
 	{
-		std::cout << "Moving head to\n";
-		getLatest()->print();
 		this->head = getLatest();
 	}
+
+	// If it's a new branch, the number of branches is reduced by one
+	if (last->isNewBranch()) {numBranches--;}
 
 	auto parents = last->getParents();
 
