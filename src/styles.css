@@ -1,46 +1,51 @@
-body, html {
+body, html, #input-box-cmd {
   padding: 0;
   margin: 0;
-}
-#input-box-cmd, #locked-text, #history {
   background-color: black;
   color: #FFB000;
   font-family: monospace; 
   font-size: 19px;
-  padding: 0;
 }
-#textenter, #history {
-  width: 100%;
-}
-#locked-text {
-  width: 4em;
-  text-align: right;
-  display: inline-block;
-}
-#input-box-cmd {
-  border: none;
-  height: 22px;
-	text-align: left;
-  /* W3C stupidiy compensation factor */
-  width: calc(100% - 4em);
-}
-#history {
-  height: calc(5 * 20px);
-  line-height: 20px;
-  border-top: 1px solid #FFB000;
-  overflow: hidden;
-  vertical-align: bottom;
+
+#input-box-cmd, #locked-text, #history, #githist, #histories {
   padding: 0;
   margin: 0;
+  width: 100%;
+}
+
+#textenter, #histories, #controls {
+  width: 100%;
+}
+
+#githist, #history, #locked-text, #input-cmd-box {
   display: inline-block;
-  padding-left: 4em;
+  line-height: 20px;
+}
+
+#githist, #locked-text {
+  width: 4em;
+  text-align: right;
+}
+#input-box-cmd, #history {
+  border: none;
+  height: 20px;
+	text-align: left;
   width: calc(100% - 4em);
+}
+
+#githist, #history {
+  height: calc(5 * 20px);
+  line-height: 20px;
+  display: inline-block;
+}
+#history li, #githist li {
+  list-style-type: none;
 }
 
 input:focus {
   outline: none;
 }
-#canvas{
+#canvas {
   clear: both;
   background-color: black;
 }
