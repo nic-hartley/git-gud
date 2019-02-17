@@ -1,5 +1,5 @@
 mergeInto(LibraryManager.library, {
-  draw_commit_circle: function(x, y, color, isHead) {
+  draw_commit_circle: function(ID, x, y, color, isHead) {
 
     if (!isHead) {
       ctx.beginPath();
@@ -24,6 +24,14 @@ mergeInto(LibraryManager.library, {
       ctx.lineWidth = 3;
       ctx.stroke();
     }
+
+    // Draw the commit ID in the center
+    ctx.font = "10px Arial";
+    ctx.fillStyle = "black";
+    //var text = ID.toString();
+    var text = ID.toString();
+    var leftOffset = ctx.measureText(text).width / 2;
+    ctx.fillText(text, centerX(x) - leftOffset, centerY(y));
   },
   
   connect_circles: function(topX, topY, botX, botY) {
