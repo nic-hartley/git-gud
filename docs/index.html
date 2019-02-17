@@ -10,12 +10,11 @@
       Get a real browser!
     </canvas>
     <br />      
-    <textarea id="history" rows="5" cols="40" readonly></textarea>
-    <form id="command-prompt" autocomplete="off" spellcheck="false">
-      <span class="locked-text"> &gt;&nbsp;git&nbsp;</span><input autofocus="autofocus" type="text" maxlength="32" id="input-box-cmd" onkeypress="return noenter()" onKeyDown="if(event.keyCode==13) return hist()"/>
+    <div id="history"></div><br />
+<!--    <form id="command-prompt" autocomplete="off" spellcheck="false">-->
+      <span class="locked-text"> &gt;&nbsp;git&nbsp;</span><input autocomplete="off" spellcheck="false" autofocus="autofocus" type="text" maxlength="32" id="input-box-cmd" onkeypress="return noenter()" onKeyDown="if(event.keyCode==13) return hist()"/>
 <!--        <input type="submit" value="Go"/>-->
 <!--         <textarea name="Text1" cols="40" rows="5" value=" > git "></textarea> -->
-    </form>
 
     <script src="./git-gud.js"></script>
     <script src="./api.js"></script>
@@ -36,7 +35,7 @@
           document.getElementById("history").innerHTML = x ;  
         }
         else{
-          document.getElementById("history").innerHTML = old + "\n" + x;
+          document.getElementById("history").innerHTML = old + "<br />" + x;
         }
         i=i+1;
                 
@@ -50,23 +49,33 @@
 //            old1 = $('history').val().replace(/^.*\n/g,"");
 //            $('history').val(old1);
 //        }
-//        return x;
+        return false;
       }
       function action_process(x){
           var x_split = x.split(' ');
-          console.log(x_split);
-          if(x == "git commit"){
-              console.log("a");
+          var text_hist = document.getElementById("history").innerHTML;
+          var text="Invalid command entered";
+//          console.log(text_hist);
+          if(x_split[1] == "init"){
+              init();
           }
-          if(x == "git branch"){
-              console.log("a");
+          else if(x_split[1] == "commit"){
+              commit();
           }
-          if(x == "git branch"){
-              console.log("a");
+          else if(x_split[1] == "branch"){
+              branch();
           }
-          if(x == "git branch"){
-              console.log("a");
+          else if(x_split[1] == "merge" && x_split[2]!=""){
+              merge(x_split[2]);
           }
+          else if(x_split[1] == "checkout" && x_split[2]!=""){
+              checkout(x_split[2]);
+          }
+          else{
+              document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:red;'>" + text + "</span>" ;
+          }
+          document.getElementById("history").scrollTop = document.getElementById("history").scrollHeight ;
+
       }
     </script>
   </body>
