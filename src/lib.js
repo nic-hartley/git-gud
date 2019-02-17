@@ -27,8 +27,7 @@ mergeInto(LibraryManager.library, {
 
     // Draw the commit ID in the center
     ctx.font = "10px Arial";
-    ctx.fillStyle = "black";
-    //var text = ID.toString();
+    ctx.fillStyle = "black"
     var text = ID.toString();
     var leftOffset = ctx.measureText(text).width / 2;
     ctx.fillText(text, centerX(x) - leftOffset, centerY(y));
@@ -72,8 +71,43 @@ mergeInto(LibraryManager.library, {
     }
   },
 
+  draw_columns: function(numColumns, current) {
+
+    ctx.beginPath();
+    ctx.strokeStyle = "gray";
+    ctx.lineWidth = 1;
+
+    for (var i = 0; i < numColumns; i++) {
+      var xpos = COL_WIDTH * (i+1);
+      ctx.moveTo(xpos, 0);
+      ctx.lineTo(xpos, canvas.height);
+      ctx.stroke();
+
+      // Fill in the current column
+      if (i == current) {
+        ctx.fillRect(xpos, 0, COL_WIDTH, canvas.height);
+      }
+
+      // Draw the branch ID in the center
+      ctx.font = "10px Arial";
+      ctx.fillStyle = "black";
+      var text = i.toString();
+      var leftOffset = ctx.measureText(text).width / 2;
+      ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH/2 - leftOffset,10);
+    }
+  },
+
   start_draw: function(x, y) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+  },
+
+  translate: function(x, y) {
+    ctx.translate(x, y);
+  },
+
+  end_draw: function() {
+    ctx.restore();
   },
 
   main_done: function() {

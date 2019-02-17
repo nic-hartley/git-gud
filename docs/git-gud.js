@@ -5038,7 +5038,7 @@ function copyTempDouble(ptr) {
       }
     }
 
-  function _draw_commit_circle(x, y, color, isHead) {
+  function _draw_commit_circle(ID, x, y, color, isHead) {
   
       if (!isHead) {
         ctx.beginPath();
@@ -5063,6 +5063,14 @@ function copyTempDouble(ptr) {
         ctx.lineWidth = 3;
         ctx.stroke();
       }
+  
+      // Draw the commit ID in the center
+      ctx.font = "10px Arial";
+      ctx.fillStyle = "black";
+      //var text = ID.toString();
+      var text = ID.toString();
+      var leftOffset = ctx.measureText(text).width / 2;
+      ctx.fillText(text, centerX(x) - leftOffset, centerY(y));
     }
 
   function _emscripten_get_heap_size() {
