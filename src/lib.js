@@ -5,12 +5,15 @@ mergeInto(LibraryManager.library, {
     ctx.translate(mx - currentCol * COL_WIDTH + canvas.width / 2 - COL_WIDTH / 2, 0);
 
     ctx.beginPath();
-    ctx.strokeStyle = "gray";
+    ctx.strokeStyle = AMBER;
     ctx.lineWidth = 1;
 
-    ctx.fillStyle = "#AAAAAAAA";
-    ctx.fillRect(COL_WIDTH * currentCol, 0, COL_WIDTH, canvas.height);
+    ctx.moveTo(COL_WIDTH * currentCol, 0);
+    ctx.lineTo(COL_WIDTH * currentCol, canvas.height);
+    ctx.moveTo(COL_WIDTH * (currentCol+1), 0);
+    ctx.lineTo(COL_WIDTH * (currentCol+1), canvas.height);
 
+    /* Draws all columns lines
     ctx.moveTo(0, 0);
     ctx.lineTo(0, canvas.height);
     for (var i = 0; i < numColumns; i++) {
@@ -18,6 +21,7 @@ mergeInto(LibraryManager.library, {
       ctx.moveTo(rightSide, 0);
       ctx.lineTo(rightSide, canvas.height);
     }
+    */
     // stroke dividing lines
     ctx.stroke();
 
@@ -37,21 +41,21 @@ mergeInto(LibraryManager.library, {
     if (isHead) {
       ctx.beginPath();
       ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS * 0.75, 0, 2 * Math.PI);
-      ctx.fillStyle = "#00FF00";
+      ctx.fillStyle = AMBER;
       ctx.fill();
 
       ctx.beginPath();
       ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS, 0, 2 * Math.PI);
-      ctx.stokeStyle = "black";
+      ctx.stokeStyle = AMBER;
       ctx.lineWidth = 3;
       ctx.stroke();
     } else {
       ctx.beginPath();
       ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS, 0, 2 * Math.PI);
-      ctx.strokeStyle = "black";
+      ctx.strokeStyle = AMBER;
       ctx.lineWidth = 2;
       ctx.stroke();
-      ctx.fillStyle = "#85c1e9";
+      ctx.fillStyle = AMBER;
       ctx.fill();
     }
 
@@ -112,7 +116,7 @@ mergeInto(LibraryManager.library, {
       ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
     }
 
-    ctx.strokeStyle = 'black';
+    ctx.strokeStyle = AMBER;
     ctx.lineWidth = 2;
     ctx.stroke();
   },
@@ -124,7 +128,7 @@ mergeInto(LibraryManager.library, {
       ctx.font = "10px Arial";
       let text = "b" + i.toString();
       let leftOffset = ctx.measureText(text).width / 2;
-      ctx.fillStyle = "black";
+      ctx.fillStyle = AMBER;
       ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH / 2 - leftOffset, 10);
     }
     ctx.restore(); // horizontal shift
