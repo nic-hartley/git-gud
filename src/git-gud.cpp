@@ -13,37 +13,36 @@ extern "C" {
 git_gud::GitTree tree;
 
 int main() {
-  print("starting main");
   tree.addCommit();
-  tree.addCommit();
-  auto newBranch = tree.addCommitNewBranch();
-  tree.checkout(0);
-  tree.addCommit();
-  tree.checkout(newBranch->getBranch());
-  tree.addCommit();
-  tree.checkout(0);
-  tree.merge(1);
-  tree.addCommit();
+  tree.branch();
   tree.checkout(1);
-  tree.addCommitNewBranch();
-  tree.checkoutCommit(newBranch->getID());
-  tree.addCommitNewBranch();
+  tree.addCommit();
+  tree.branch();
+  tree.checkout(2);
+  tree.addCommit();
+  tree.addCommit();
+  tree.checkout(0);
+  tree.addCommit();
+  tree.merge(1);
+  tree.branch();
+  tree.addCommit();
+  tree.checkout(3);
+  tree.addCommit();
   tree.checkout(1);
   tree.merge(3);
   tree.checkout(0);
   tree.merge(2);
-  print("main done");
+  tree.merge(1);
+
   main_done();
 }
 
 extern "C" {
   EMSCRIPTEN_KEEPALIVE
   void draw() {
-    print("starting draw");
     auto head = tree.getHead();
     set_relative_to(head->getBranch(), head->getID());
     for (auto commit : tree.getAllCommits()) {
-      print("Drawing commit");
       draw_commit_circle(commit->getBranch(), commit->getID(),
         tree.isHead(commit->getID()) ? "green" : "red"
       );
@@ -54,6 +53,20 @@ extern "C" {
         );
       }
     }
-    print("draw done");
+  }
+
+  EMSCRIPTEN_KEEPALIVE
+  void checkout_commit(int id) {
+    tree.checkoutCommit(id);
+  }
+
+  EMSCRIPTEN_KEEPALIVE
+  void checkout_branch(int id) {
+    tree.checkout(id);
+  }
+
+  EMSCRIPTEN_KEEPALIVE
+  void commit() {
+    tree.addCommit();
   }
 }

@@ -18,3 +18,6 @@ function branch(name) {
 function merge(into, from) {
   console.log("would merge", from, "into", into);
 }
+function checkout(into, from){
+    console.log("would checkout from", from, "into", into);
+}

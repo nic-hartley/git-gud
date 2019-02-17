@@ -97,8 +97,9 @@ namespace git_gud
 			int nextBranchID = 0;
 
 			std::shared_ptr<Commit> head;
+      int currentBranch = 0;
 			std::vector<std::shared_ptr<Commit> > commits;
-			int numBranches = 0;
+			int numBranches = 1;
 
 		public:
 
@@ -142,27 +143,18 @@ namespace git_gud
 			 */
 			std::shared_ptr<Commit> addCommit(int parentID);
 
-
-			/**
-			 * Creates a new branch at HEAD.
-			 */
-			std::shared_ptr<Commit> addCommitNewBranch();
-
-			/**
-			 * Generates a new Commit as a child of the specified parent,
-			 * on a new branch.
-			 *
-			 * @throws std::invalid_argument if parent not found.
-			 */
-			std::shared_ptr<Commit> addCommitNewBranch(int parentID);
-
 			/**
 			 * Sets the head of the tree to the latest commit on the branch.
 			 *
-			 * @param beanchID ID of the branch to checkout.
+			 * @param branchID ID of the branch to checkout.
 			 * @throws std::invalid_argument if branchID does not exist.
 			 */
 			void checkout(int branchID);
+
+      /**
+       * Creates a new branch but doesn't check it out.
+       */
+      int branch();
 
 			/**
 			 * Sets the head of the tree to a specific commit.
