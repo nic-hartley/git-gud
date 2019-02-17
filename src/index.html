@@ -55,8 +55,11 @@
           var x_split = x.split(' ');
           var text_hist = document.getElementById("history").innerHTML;
           var text="Invalid command entered";
-          console.log(text_hist);
-          if(x_split[1] == "commit"){
+//          console.log(text_hist);
+          if(x_split[1] == "init"){
+              init();
+          }
+          else if(x_split[1] == "commit"){
               commit();
           }
           else if(x_split[1] == "branch"){

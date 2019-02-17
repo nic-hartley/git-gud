@@ -7,6 +7,9 @@ const ROW_HEIGHT = CIRCLE_RADIUS * 2 + VERT_MARGIN * 2;
 function centerX(x) { return x * COL_WIDTH + CIRCLE_RADIUS + HORIZ_MARGIN; }
 function centerY(y) { return y * ROW_HEIGHT + CIRCLE_RADIUS + VERT_MARGIN; }
 
+function init(){
+    console.log("would do an init");
+}
 function commit() {
   console.log("would do a commit");
 }
