@@ -114,6 +114,15 @@ namespace git_gud
 			std::shared_ptr<Commit> getLatest() const;
 			std::shared_ptr<Commit> getLatest(int branchID) const;
 
+			/** Guaranteed to have non-repeating IDs. */
+			std::vector<int> getAllBranchIDs() const;
+
+			/** If it has the same ID twice, something is very wrong. */
+			std::vector<int> getAllCommitIDs() const;
+			
+			bool isValidCommitID(int id) const;
+			bool isValidBranchID(int id) const;
+
 			std::vector<std::shared_ptr<Commit> >& getAllCommits();
 			int getNumBranches() const;
 			int getNumCommits() const;

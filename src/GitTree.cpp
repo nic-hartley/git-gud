@@ -3,7 +3,8 @@
 #include <iostream>
 #include <memory>
 #include <vector>
-#include <stdexcept>
+#include <stdexcept> // invalid_argument
+#include <algorithm> // find
 
 using namespace git_gud;
 
@@ -79,6 +80,51 @@ int GitTree::getNumBranches() const
 int GitTree::getNumCommits() const
 {
 	return this->commits.size();
+}
+
+std::vector<int> GitTree::getAllBranchIDs() const
+{
+	std::vector<int> ids;
+
+	// iterate through all commits
+	for (auto commit : this->commits)
+	{
+		// check if the commit's branch is already in the list
+		if(std::find(ids.begin(), ids.end(), commit->getBranch()) == ids.end())
+		{
+    		// ID not already added
+    		ids.push_back(commit->getBranch());
+		}
+	}
+
+	return ids;
+}
+
+std::vector<int> GitTree::getAllCommitIDs() const
+{
+	std::vector<int> ids;
+	for (auto commit : this->commits)
+	{
+		ids.push_back(commit->getID());
+	}
+
+	return ids;
+}
+
+bool GitTree::isValidBranchID(int id) const
+{
+	auto ids = getAllBranchIDs();
+
+	// If the id is found, then it is valid
+	return std::find(ids.begin(), ids.end(), id) != ids.end();
+}
+
+bool GitTree::isValidCommitID(int id) const
+{
+	auto ids = getAllCommitIDs();
+
+	// If the id is found, then it is valid
+	return std::find(ids.begin(), ids.end(), id) != ids.end();
 }
 
 std::shared_ptr<Commit> GitTree::addCommit()
