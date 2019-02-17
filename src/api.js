@@ -21,14 +21,6 @@ function branch() {
   Module._branch();
   Module._draw();
 }
-
-<<<<<<< HEAD
-function merge(into) {
-  console.log("would merge into", into);
-}
-function checkout(into){
-    console.log("would checkout into", into);
-=======
 function merge(from) {
   if (from[0] === 'c') {
     throw new Error("Can only merge branches");
@@ -49,5 +41,4 @@ function checkout(branch) {
     throw new Error("Specify a branch or commit to check out");
   }
   Module._draw();
->>>>>>> f180766207a65edb412fab43b3b6934ba41b6286
 }
