@@ -1,28 +1,39 @@
 mergeInto(LibraryManager.library, {
-  draw_columns: function(numColumns, current) {
+  draw_bg: function(numColumns, currentCol, currentHeadId) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save(); // horizontal shift
+    ctx.translate(mx - currentCol * COL_WIDTH + canvas.width / 2 - COL_WIDTH / 2, 0);
+
     ctx.beginPath();
     ctx.strokeStyle = "gray";
     ctx.lineWidth = 1;
 
     ctx.fillStyle = "#AAAAAAAA";
-    ctx.fillRect(COL_WIDTH * current, 0, COL_WIDTH, canvas.height);
+    ctx.fillRect(COL_WIDTH * currentCol, 0, COL_WIDTH, canvas.height);
 
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, canvas.height);
     for (var i = 0; i < numColumns; i++) {
       var rightSide = COL_WIDTH * (i+1);
       ctx.moveTo(rightSide, 0);
       ctx.lineTo(rightSide, canvas.height);
-
-      // Draw the branch ID in the center
-      ctx.font = "10px Arial";
-      ctx.fillStyle = "black";
-      var text = "b" + i.toString();
-      var leftOffset = ctx.measureText(text).width / 2;
-      ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH/2 - leftOffset, 10);
     }
+    // stroke dividing lines
     ctx.stroke();
+
+    ctx.save();
+    ctx.resetTransform();
+    ctx.beginPath();
+    ctx.rect(0, 15, canvas.width, canvas.height);
+    ctx.restore();
+
+    ctx.save(); // vertical shift + clip
+    ctx.clip();
+    ctx.translate(0, my - currentHeadId * ROW_HEIGHT + canvas.height / 2 - ROW_HEIGHT);
   },
 
   draw_commit_circle: function(ID, x, y, isHead) {
+    // head and non-head drawn differently
     if (isHead) {
       ctx.beginPath();
       ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS * 0.75, 0, 2 * Math.PI);
@@ -106,17 +117,17 @@ mergeInto(LibraryManager.library, {
     ctx.stroke();
   },
 
-  start_draw: function(x, y) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
-  },
-
-  translate: function(x, y) {
-    ctx.translate(x, y);
-  },
-
-  end_draw: function() {
-    ctx.restore();
+  end_draw: function(numColumns) {
+    ctx.restore(); // vertical shift + clip
+    for (let i = 0; i < numColumns; ++i) {
+      // Draw the branch ID in the center
+      ctx.font = "10px Arial";
+      let text = "b" + i.toString();
+      let leftOffset = ctx.measureText(text).width / 2;
+      ctx.fillStyle = "black";
+      ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH / 2 - leftOffset, 10);
+    }
+    ctx.restore(); // horizontal shift
   },
 
   main_done: function() {

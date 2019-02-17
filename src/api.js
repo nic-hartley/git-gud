@@ -5,6 +5,25 @@ const COL_WIDTH = CIRCLE_RADIUS * 2 + HORIZ_MARGIN * 2;
 const ROW_HEIGHT = CIRCLE_RADIUS * 2 + VERT_MARGIN * 2;
 const LINE_ARC_RADIUS = VERT_MARGIN/2;
 
+let dragging = false;
+let lastMouseX;
+let lastMouseY;
+canvas.onmousedown = e => {
+  dragging = true;
+  lastMouseX = e.x;
+  lastMouseY = e.y;
+}
+canvas.onmouseup = () => { dragging = false; }
+canvas.onmousemove = e => {
+  if (!dragging) return;
+  mx += e.x - lastMouseX;
+  my += e.y - lastMouseY;
+  console.log('mx', mx);
+  console.log('my', my);
+  lastMouseX = e.x;
+  lastMouseY = e.y;
+}
+
 function centerX(x) { return x * COL_WIDTH + CIRCLE_RADIUS + HORIZ_MARGIN; }
 function centerY(y) { return y * ROW_HEIGHT + CIRCLE_RADIUS + VERT_MARGIN; }
 
