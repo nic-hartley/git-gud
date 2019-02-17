@@ -33,7 +33,7 @@ mergeInto(LibraryManager.library, {
     ctx.fillText(text, centerX(x) - leftOffset, centerY(y));
   },
   
-  connect_circles: function(topX, topY, botX, botY) {
+  connect_circles: function(topX, topY, botX, botY, isMerge) {
 
     ctx.beginPath();
     // move to middle bottom of first circle
@@ -48,6 +48,18 @@ mergeInto(LibraryManager.library, {
       ctx.stroke();
     }
 
+    // If botX is less than topX, it's a merge, and the line should
+    // be near the bottom
+    else if (isMerge) {
+      console.log("is merge");
+      ctx.lineTo(centerX(topX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN/2));
+      ctx.stroke();
+      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN/2));
+      ctx.stroke();
+      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
+      ctx.stroke();
+    }
+
     // If botX is greater than topX, it's a branch, and the
     // branch line should be near the top
     else if (botX > topX) {
@@ -56,17 +68,6 @@ mergeInto(LibraryManager.library, {
       ctx.lineTo(centerX(botX), centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN/2));
       ctx.stroke();
       ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS );
-      ctx.stroke();
-    }
-
-    // If botX is less than topX, it's a merge, and the line should
-    // be near the bottom
-    else {
-      ctx.lineTo(centerX(topX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN/2));
-      ctx.stroke();
-      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN/2));
-      ctx.stroke();
-      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
       ctx.stroke();
     }
   },
