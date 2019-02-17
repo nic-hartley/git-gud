@@ -12,16 +12,10 @@ using namespace git_gud;
 
 GitTree::GitTree()
 {
-	auto firstCommit = std::make_shared<Commit>(generateBranchID());
+	auto firstCommit = std::make_shared<Commit>(nextBranchID++, nextCommitID++);
 	this->commits.push_back(firstCommit);
 	this->head = firstCommit;
 	this->numBranches = 1;
-}
-
-int GitTree::generateBranchID()
-{
-	static int ID = 0;
-	return ID++;
 }
 
 std::shared_ptr<Commit> GitTree::getCommit(int ID) const
@@ -158,7 +152,7 @@ std::shared_ptr<Commit> GitTree::addCommit(int parentID)
 		}
 	}
 
-	auto commit = std::make_shared<Commit>(parent->getBranch());
+	auto commit = std::make_shared<Commit>(parent->getBranch(), nextCommitID++);
 
 	commit->addParent(parent);
 	parent->addChild(commit);
@@ -179,7 +173,7 @@ std::shared_ptr<Commit> GitTree::addCommitNewBranch(int parentID)
 {
 	// throws invalid_argument if parent not found
 	auto parent = getCommit(parentID);
-	auto commit = std::make_shared<Commit>(generateBranchID());
+	auto commit = std::make_shared<Commit>(nextBranchID++, nextCommitID++);
 
 	commit->addParent(parent);
 	parent->addChild(commit);
@@ -245,7 +239,11 @@ void GitTree::undo()
 	}
 
 	// If it's a new branch, the number of branches is reduced by one
-	if (last->isNewBranch()) {numBranches--;}
+	if (last->isNewBranch())
+	{
+		numBranches--;
+		nextBranchID--;
+	}
 
 	auto parents = last->getParents();
 
@@ -253,6 +251,8 @@ void GitTree::undo()
 	{
 		parent->removeChild(last->getID());
 	}
+
+	nextCommitID--;
 }
 
 void GitTree::print() const
@@ -261,6 +261,8 @@ void GitTree::print() const
 	std::cout << "GitTree\n";
 	std::cout << "Number of branches: " << getNumBranches() << "\n";
 	std::cout << "Number of commits: " << getNumCommits() << "\n";
+	std::cout << "Next branch ID: " << nextBranchID << "\n";
+	std::cout << "Next commit ID: " << nextCommitID << "\n";
 
 	for (auto ptr : this->commits) {
 
