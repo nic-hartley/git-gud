@@ -46,6 +46,11 @@ std::shared_ptr<Commit> GitTree::getHead() const
 	return this->head;
 }
 
+bool GitTree::isHead(int commitID) const
+{
+	return this->head->getID() == commitID;
+}
+
 std::shared_ptr<Commit> GitTree::getLatest() const
 {
 	if (this->commits.empty()) {return NULL;}

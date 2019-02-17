@@ -110,6 +110,7 @@ namespace git_gud
 			GitTree();
 
 			std::shared_ptr<Commit> getHead() const;
+			bool isHead(int commitID) const;
 			std::shared_ptr<Commit> getCommit(int ID) const;
 			std::shared_ptr<Commit> getLatest() const;
 			std::shared_ptr<Commit> getLatest(int branchID) const;
