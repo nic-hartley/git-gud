@@ -80,16 +80,16 @@ build() {
   rm docs/*.[ch]pp
 
   # Install EMSDK if necessary
-  emcc --version >/dev/null 2>&1 || install_emcc
+  #emcc --version >/dev/null 2>&1 || install_emcc
 
   echo Compiling src/*.cpp to docs/git-gud.wasm
-  emcc src/*.cpp -O3 -o docs/git-gud.js -std=c++11 -s DISABLE_EXCEPTION_CATCHING=0 -s WASM=1 --js-library src/lib.js --pre-js src/lib-pre.js >/dev/null
+  #emcc src/*.cpp -O3 -o docs/git-gud.js -std=c++11 -s DISABLE_EXCEPTION_CATCHING=0 -s WASM=1 --js-library src/lib.js --pre-js src/lib-pre.js >/dev/null
 
   # Install WABT if necessary
-  wasm2wat --help >/dev/null 2>&1 || install_wabt
+  #wasm2wat --help >/dev/null 2>&1 || install_wabt
 
   echo Generating WASM text representation
-  wasm2wat docs/git-gud.wasm >docs/git-gud.wat
+  #wasm2wat docs/git-gud.wasm >docs/git-gud.wat
 
   echo "Compilation done!"
 }

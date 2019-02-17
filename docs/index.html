@@ -5,117 +5,167 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <h1> Git</h1>
     <canvas id="canvas" width="640" height="480">
       Get a real browser!
     </canvas>
-    <br />      
-    <div id="history" onclick="document.getElementById('input-box-cmd').focus(); return false;"></div><br />
-      <span id="locked-text"> &gt;&nbsp;git&nbsp;</span><input autocomplete="off" spellcheck="false" autofocus="autofocus" type="text" maxlength="32" id="input-box-cmd" onkeypress="return noenter()" onKeyDown="if(event.keyCode==13) return hist(); if(event.keycode == 40) return down_arrow()" />
+    <div id="controls">
+      <ul id="history"></ul>
+      <div id="textenter">
+        <span id="locked-text">&gt;&nbsp;git&nbsp;</span><input id="input-box-cmd" autocomplete="off" spellcheck="false" autofocus="autofocus" type="text" maxlength="32" />
+      </div>
+    </div>
+    
     <script src="./git-gud.js"></script>
     <script src="./api.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
     <script>
-      var i=0;
-      var flag=0;
-      function noenter() {
-        return !(window.event && window.event.keyCode == 13); 
-      }
-      var commands = [];
-      function hist(){
-        commands.push(document.getElementById("input-box-cmd").value);
-        var old = document.getElementById("history").innerHTML;
-        var x;
-        if(flag==1 && (document.getElementById("input-box-cmd").value=="y" || document.getElementById("input-box-cmd").value=="n")){
-            x = document.getElementById("input-box-cmd").value;
-        }
-        else if(bad==1){
-            x = document.getElementById("input-box-cmd").value;
-//            bad=0;
-        }
-        else{
-            x = "git " + document.getElementById("input-box-cmd").value;
-        }
-        document.getElementById("input-box-cmd").value = "" ;
+      const HISTORY = document.getElementById("history");
+      const INPUT = document.getElementById("input-box-cmd");
+      const CANVAS = document.getElementById("canvas");
+      const CONTROLS = document.getElementById("controls");
 
-        if(i==0){
-          document.getElementById("history").innerHTML = x ;
+      HISTORY.onclick = _ => INPUT.focus();
+
+      window.addEventListener('resize', _ => {
+        CANVAS.width = window.innerWidth;
+        console.log("heights", CONTROLS.clientHeight, window.innerHeight);
+        CANVAS.height = window.innerHeight - CONTROLS.clientHeight;
+      });
+      window.dispatchEvent(new FocusEvent("resize"));
+
+      function addToHistory(text) {
+        let li = document.createElement("LI");
+        li.innerHTML = text;
+        HISTORY.appendChild(li);
+        if (HISTORY.children.length > 5) {
+          HISTORY.removeChild(HISTORY.children[0]);
         }
-        else{
-            if(flag==1 && (x=="y" || x=="n")){
-                document.getElementById("history").innerHTML = old + " " + x;
-            }
-            else{
-            document.getElementById("history").innerHTML = old + "<br />" + x;
-            }
+      }
+
+      INPUT.onkeydown = e => {
+        if (e.keyCode !== 13) return true;
+        let command = INPUT.value;
+        INPUT.value = "";
+        addToHistory(command);
+
+        let split = command.split(' ');
+        if (split[0] == "init") {
+
+        } else if (split[0] == "commit") {
+          commit();
+        } else if (split[0] == "branch") {
+          branch();
+        } else if (split[0] == "merge") {
+          merge(split[1]);
+        } else if (split[0] == "checkout") {
+          checkout(split[1]);
+        } else {
+          addToHistory("<span style='color:red'>Invalid command!</span>");
         }
-        i=i+1;
+
+        e.preventDefault(); return false;
+      }
+
+//       var i=0;
+//       var flag=0;
+//       function noenter() {
+//         return !(window.event && window.event.keyCode == 13); 
+//       }
+//       var commands = [];
+//       function hist(){
+//         commands.push(document.getElementById("input-box-cmd").value);
+//         var old = document.getElementById("history").innerHTML;
+//         var x;
+//         if(flag==1 && (document.getElementById("input-box-cmd").value=="y" || document.getElementById("input-box-cmd").value=="n")){
+//             x = document.getElementById("input-box-cmd").value;
+//         }
+//         else if(bad==1){
+//             x = document.getElementById("input-box-cmd").value;
+// //            bad=0;
+//         }
+//         else{
+//             x = /*"git " +*/ document.getElementById("input-box-cmd").value;
+//         }
+//         document.getElementById("input-box-cmd").value = "" ;
+
+//         if(i==0){
+//           document.getElementById("history").innerHTML = x ;
+//         }
+//         else{
+//             if(flag==1 && (x=="y" || x=="n")){
+//                 document.getElementById("history").innerHTML = old + " " + x;
+//             }
+//             else{
+//             document.getElementById("history").innerHTML = old + "<br />" + x;
+//             }
+//         }
+//         i=i+1;
                 
-        document.getElementById("history").scrollTop = document.getElementById("history").scrollHeight ;
-        action_process(x);
+//         document.getElementById("history").scrollTop = document.getElementById("history").scrollHeight ;
+//         action_process(x);
 
-//        return false;
-      }
-      var bad=0;
-      function action_process(x){
-          var x_split = x.split(' ');
-          var text_hist = document.getElementById("history").innerHTML;
-          var text="Invalid command entered";
-          var warning_text="This action is not reversible, Do you want to proceed [y/n]"
-          try {
-              if(flag==1 || x_split[1] == "init"){
-                  if(flag==0){
-                  document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:yellow;'>" + warning_text + "</span>" ;
-                  document.getElementById("locked-text").innerHTML = "[y/n]";
-                  document.getElementById("input-box-cmd").style.width = "424px";
-                  bad=1;
-                  }
-                  if(flag!=0){
-                      bad=0;
-                  }
-                  flag=1;
-                  console.log(x_split);
-                  if(x_split[0] == "y"){
-                  document.getElementById("locked-text").innerHTML = "&gt;&nbsp;git&nbsp;";
-                  document.getElementById("input-box-cmd").style.width = "412px";
-                  flag=0;
-                  bad=0;
-                  init();
-                  }
-                  else if(x_split[0] == "n"){
-                  flag=0;
-                  bad=0;
-                  document.getElementById("locked-text").innerHTML = "&gt;&nbsp;git&nbsp;";
-                  document.getElementById("input-box-cmd").style.width = "412px";
-                  }
-                  else if(bad==0 && (x_split[0]!="y" || x_split[0]!="n")){
-                  document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:yellow;'>" + "Please enter a valid choice" + "</span>" ;
-                  bad=1;
-                  }
+// //        return false;
+//       }
+//       var bad=0;
+//       function action_process(x){
+//           var x_split = x.split(' ');
+//           var text_hist = document.getElementById("history").innerHTML;
+//           var text="Invalid command entered";
+//           var warning_text="This action is not reversible, Do you want to proceed [y/n]"
+//           try {
+//               if(flag==1 || x_split[1] == "init"){
+//                   if(flag==0){
+//                   document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:yellow;'>" + warning_text + "</span>" ;
+//                   document.getElementById("locked-text").innerHTML = "[y/n]";
+//                   document.getElementById("input-box-cmd").style.width = "424px";
+//                   bad=1;
+//                   }
+//                   if(flag!=0){
+//                       bad=0;
+//                   }
+//                   flag=1;
+//                   console.log(x_split);
+//                   if(x_split[0] == "y"){
+//                   document.getElementById("locked-text").innerHTML = "&gt;&nbsp;git&nbsp;";
+//                   document.getElementById("input-box-cmd").style.width = "412px";
+//                   flag=0;
+//                   bad=0;
+//                   init();
+//                   }
+//                   else if(x_split[0] == "n"){
+//                   flag=0;
+//                   bad=0;
+//                   document.getElementById("locked-text").innerHTML = "&gt;&nbsp;git&nbsp;";
+//                   document.getElementById("input-box-cmd").style.width = "412px";
+//                   }
+//                   else if(bad==0 && (x_split[0]!="y" || x_split[0]!="n")){
+//                   document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:yellow;'>" + "Please enter a valid choice" + "</span>" ;
+//                   bad=1;
+//                   }
                   
-              }
-              else if(x_split[1] == "commit" && x_split[2]==null){
-                  commit();
-              }
-              else if(x_split[1] == "branch" && x_split[2]==null){
-                  branch();
-              }
-              else if(x_split[1] == "merge" && x_split[2]!=null){
-                  merge(x_split[2]);
-              }
-              else if(x_split[1] == "checkout" && x_split[2]!=null){
-                  checkout(x_split[2]);
-              }
-              else{
-                  document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:red;'>" + text + "</span>" ;
-              }
-              document.getElementById("history").scrollTop = document.getElementById("history").scrollHeight ;
-          } catch (e) {
-            console.log("Type: " + typeof(e));
-            console.log("Message:", e);
-          }
-      }
+//               }
+//               else if(x_split[1] == "commit" && x_split[2]==null){
+//                   commit();
+//               }
+//               else if(x_split[1] == "branch" && x_split[2]==null){
+//                   branch();
+//               }
+//               else if(x_split[1] == "merge" && x_split[2]!=null){
+//                   merge(x_split[2]);
+//               }
+//               else if(x_split[1] == "checkout" && x_split[2]!=null){
+//                   checkout(x_split[2]);
+//               }
+//               else{
+//                   document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:red;'>" + text + "</span>" ;
+//               }
+//               document.getElementById("history").scrollTop = document.getElementById("history").scrollHeight ;
+//           } catch (e) {
+//             console.log("Type: " + typeof(e));
+//             console.log("Message:", e);
+//           }
+//       }
     </script>
   </body>
 </html>

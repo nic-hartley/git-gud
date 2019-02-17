@@ -1,50 +1,50 @@
-body{
-    overflow-x: hidden;
-    background-image: url("background.png");
-    background-size: cover;
+body, html {
+  padding: 0;
+  margin: 0;
 }
-#input-box-cmd{
-    background-color: black;
-    border: none;
-    width: 412px;
-    height: 22px;
-    color: white;
-	font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace; 
+#input-box-cmd, #locked-text, #history {
+  background-color: black;
+  color: #FFB000;
+  font-family: monospace; 
+  font-size: 19px;
+  padding: 0;
+}
+#textenter, #history {
+  width: 100%;
+}
+#locked-text {
+  width: 4em;
+  text-align: right;
+  display: inline-block;
+}
+#input-box-cmd {
+  border: none;
+  height: 22px;
 	text-align: left;
-    padding:0;
-/*    line-height: 100px;*/
-    vertical-align: top;
-    font-size: 19px;
+  /* W3C stupidiy compensation factor */
+  width: calc(100% - 4em);
 }
-#locked-text{
-    background-color: black;
-    color: white;
-    font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace; 
-/*    line-height: 22px;*/
-    font-size: 19px;
+#history {
+  height: calc(5 * 20px);
+  line-height: 20px;
+  border-top: 1px solid #FFB000;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  padding-left: 4em;
+  width: calc(100% - 4em);
 }
-input:focus, select:focus, textarea:focus, button:focus {
-    outline: none;
-}
-#history{
-    background-color: black;
-    font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace; 
-    color: white;
-    width: 481px;
-    height: 195px;
-    overflow: hidden;
-/*    text-overflow: ellipsis;*/
-    text-align: bottom;
-    vertical-align: bottom;
-    font-size: 19px;
-    padding: 0;
-    margin: 0;
-    display: inline-block;
+
+input:focus {
+  outline: none;
 }
 #canvas{
-    float: left;
-    clear: both;
+  clear: both;
+  background-color: black;
 }
-input{
-    color: red;
+
+#canvas, #controls {
+  display: block;
 }
