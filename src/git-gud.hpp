@@ -190,6 +190,11 @@ namespace git_gud
 			 */
 			void undo();
 
+			/**
+			 * Reset everything.
+			 */
+			void reset();
+
 			void print() const;
 
 			static int generateBranchID();

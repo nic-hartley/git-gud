@@ -1,12 +1,29 @@
 mergeInto(LibraryManager.library, {
-  draw_commit_circle: function(x, y, color) {
-    ctx.beginPath();
-    ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS, 0, 2 * Math.PI);
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
-    ctx.stroke();
-    ctx.fillStyle = UTF8ToString(color, 8);
-    ctx.fill();
+  draw_commit_circle: function(x, y, color, isHead) {
+
+    if (!isHead) {
+      ctx.beginPath();
+      ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS, 0, 2 * Math.PI);
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = UTF8ToString(color, 8);
+      ctx.fill();
+    }
+
+    // Head commit have an additonal ring around them
+    else {
+      ctx.beginPath();
+      ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS*0.75, 0, 2*Math.PI);
+      ctx.fillStyle = UTF8ToString(color, 8);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS, 0, 2*Math.PI);
+      ctx.stokeStyle = "black";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    }
   },
   
   connect_circles: function(topX, topY, botX, botY) {

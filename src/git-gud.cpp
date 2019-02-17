@@ -6,7 +6,7 @@ extern "C" {
   extern void print(const char* message);
   extern void main_done();
   extern void set_relative_to(int x, int y);
-  extern void draw_commit_circle(int x, int y, const char* color);
+  extern void draw_commit_circle(int x, int y, const char* color, bool isHead);
   extern void connect_circles(int tx, int ty, int bx, int by);
 }
 
@@ -44,7 +44,7 @@ extern "C" {
     set_relative_to(head->getBranch(), head->getID());
     for (auto commit : tree.getAllCommits()) {
       draw_commit_circle(commit->getBranch(), commit->getID(),
-        tree.isHead(commit->getID()) ? "green" : "red"
+        "#85c1e9", tree.isHead(commit->getID())
       );
       for (auto parent : commit->getParents()) {
         connect_circles(
