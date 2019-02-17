@@ -1,13 +1,36 @@
 mergeInto(LibraryManager.library, {
+  draw_columns: function(numColumns, current) {
+    ctx.beginPath();
+    ctx.strokeStyle = "gray";
+    ctx.lineWidth = 1;
+
+    ctx.fillStyle = "#AAAAAAAA";
+    ctx.fillRect(COL_WIDTH * current, 0, COL_WIDTH, canvas.height);
+
+    for (var i = 0; i < numColumns; i++) {
+      var rightSide = COL_WIDTH * (i+1);
+      ctx.moveTo(rightSide, 0);
+      ctx.lineTo(rightSide, canvas.height);
+
+      // Draw the branch ID in the center
+      ctx.font = "10px Arial";
+      ctx.fillStyle = "black";
+      var text = "b" + i.toString();
+      var leftOffset = ctx.measureText(text).width / 2;
+      ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH/2 - leftOffset, 10);
+    }
+    ctx.stroke();
+  },
+
   draw_commit_circle: function(ID, x, y, isHead) {
     if (isHead) {
       ctx.beginPath();
-      ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS*0.75, 0, 2*Math.PI);
+      ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS * 0.75, 0, 2 * Math.PI);
       ctx.fillStyle = "#00FF00";
       ctx.fill();
 
       ctx.beginPath();
-      ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS, 0, 2*Math.PI);
+      ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS, 0, 2 * Math.PI);
       ctx.stokeStyle = "black";
       ctx.lineWidth = 3;
       ctx.stroke();
@@ -80,29 +103,6 @@ mergeInto(LibraryManager.library, {
 
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 2;
-    ctx.stroke();
-  },
-
-  draw_columns: function(numColumns, current) {
-    ctx.beginPath();
-    ctx.strokeStyle = "gray";
-    ctx.lineWidth = 1;
-
-    ctx.fillStyle = "#AAAAAAAA";
-    ctx.fillRect(COL_WIDTH * current, 0, COL_WIDTH, canvas.height);
-
-    for (var i = 0; i < numColumns; i++) {
-      var rightSide = COL_WIDTH * (i+1);
-      ctx.moveTo(rightSide, 0);
-      ctx.lineTo(rightSide, canvas.height);
-
-      // Draw the branch ID in the center
-      ctx.font = "10px Arial";
-      ctx.fillStyle = "black";
-      var text = "b" + i.toString();
-      var leftOffset = ctx.measureText(text).width / 2;
-      ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH/2 - leftOffset,10);
-    }
     ctx.stroke();
   },
 
