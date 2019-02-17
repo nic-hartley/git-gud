@@ -40,8 +40,8 @@ input:focus, select:focus, textarea:focus, button:focus {
     display: inline-block;
 }
 #canvas{
-/*    float: left;*/
-/*    clear: both;*/
+    float: left;
+    clear: both;
 }
 input{
     color: red;

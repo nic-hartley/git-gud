@@ -22,7 +22,10 @@ function branch() {
   Module._branch();
   Module._draw();
 }
+<<<<<<< HEAD
+=======
 
+>>>>>>> 7c94fb5c97bc78a1f15654052693115d0eb92750
 function merge(from) {
   if (from[0] === 'c') {
     throw new Error("Can only merge branches");
