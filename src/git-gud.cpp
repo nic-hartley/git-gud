@@ -6,6 +6,7 @@ extern "C" {
   extern void print(const char* message);
   extern void main_done();
   extern void set_relative_to(int x, int y);
+  extern void start_draw(int x, int y);
   extern void draw_commit_circle(int ID, int x, int y, const char* color, bool isHead);
   extern void connect_circles(int tx, int ty, int bx, int by);
 }
