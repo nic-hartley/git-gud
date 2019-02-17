@@ -16,17 +16,6 @@ mergeInto(LibraryManager.library, {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    /* Draws all columns lines
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, canvas.height);
-    for (var i = 0; i < numColumns; i++) {
-      var rightSide = COL_WIDTH * (i+1);
-      ctx.moveTo(rightSide, 0);
-      ctx.lineTo(rightSide, canvas.height);
-    }
-    */
-    // stroke dividing lines
-
     ctx.save();
     ctx.resetTransform();
     ctx.beginPath();
@@ -62,7 +51,8 @@ mergeInto(LibraryManager.library, {
     }
 
     // Draw the commit ID in the center
-    ctx.font = "10px Arial";
+    ctx.font = "10px monospace";
+    ctx.textBaseline = "middle"; 
     ctx.fillStyle = "black"
     var text = "c" + ID.toString();
     var leftOffset = ctx.measureText(text).width / 2;
@@ -127,13 +117,24 @@ mergeInto(LibraryManager.library, {
     ctx.restore(); // vertical shift + clip
     for (let i = 0; i < numColumns; ++i) {
       // Draw the branch ID in the center
-      ctx.font = "10px Arial";
+      ctx.font = "bold 14px monospace";
       let text = "b" + i.toString();
       let leftOffset = ctx.measureText(text).width / 2;
       ctx.fillStyle = AMBER;
       ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH / 2 - leftOffset, 10);
     }
+
+    ctx.beginPath();
+    ctx.strokeStyle = AMBER;
+    ctx.setLineDash([5, 3]);/*dashes are 5px and spaces are 3px*/
+    ctx.lineWidth = 1;
+
+    ctx.moveTo(0, 16);
+    ctx.lineTo(COL_WIDTH * numColumns, 16);
+    ctx.stroke();
+    ctx.setLineDash([]);
     ctx.restore(); // horizontal shift
+
   },
 
   main_done: function() {
