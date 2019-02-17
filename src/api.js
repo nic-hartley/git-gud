@@ -28,38 +28,60 @@ function centerX(x) { return x * COL_WIDTH + CIRCLE_RADIUS + HORIZ_MARGIN; }
 function centerY(y) { return y * ROW_HEIGHT + CIRCLE_RADIUS + VERT_MARGIN; }
 
 function init() {
-  Module._init();
-  Module._draw();
+  try {
+    Module._init();
+    Module._draw();
+  } catch (e) {
+    throw UTF8ToString(e);
+  }
 }
 
 function commit() {
-  Module._commit();
-  Module._draw();
+  try {
+    Module._commit();
+    Module._draw();
+  } catch (e) {
+    throw UTF8ToString(e);
+  }
 }
 
 function branch() {
-  Module._branch();
-  Module._draw();
+  try {
+    Module._branch();
+    Module._draw();
+  } catch (e) {
+    throw UTF8ToString(e);
+  }
 }
 
 function merge(from) {
   if (from[0] === 'c') {
-    throw new Error("Can only merge branches");
+    throw "Can only merge branches";
   } else if (from[0] !== 'b') {
-    throw new Error("Specify a branch to merge");
+    throw "Specify a branch to merge";
   } else {
-    Module._merge(parseInt(from.substr(1), 10));
+
+    try {
+      Module._merge(parseInt(from.substr(1), 10));
+    } catch (e) {
+      throw UTF8ToString(e);
+    }
+
   }
   Module._draw();
 }
 
 function checkout(branch) {
-  if (branch[0] === 'b') {
-    Module._checkout_branch(parseInt(branch.substr(1), 10));
-  } else if (branch[0] == 'c') {
-    Module._checkout_commit(parseInt(branch.substr(1), 10));
-  } else {
-    throw new Error("Specify a branch or commit to check out");
+  try {
+    if (branch[0] === 'b') {
+      Module._checkout_branch(parseInt(branch.substr(1), 10));
+    } else if (branch[0] == 'c') {
+      Module._checkout_commit(parseInt(branch.substr(1), 10));
+    } else {
+      throw "Specify a branch or commit to check out";
+    }
+    Module._draw();
+  } catch (e) {
+    throw UTF8ToString(e);
   }
-  Module._draw();
 }

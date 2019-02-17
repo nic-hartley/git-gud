@@ -47,7 +47,7 @@ void Commit::addParent(std::shared_ptr<Commit> parent)
 {
 	if (parent->getID() == getID())
 	{
-		throw std::invalid_argument("Cannot add itself as a parent!");
+		throw "Cannot add itself as a parent!";
 	}
 
 	this->parents.push_back(parent);
@@ -57,7 +57,7 @@ void Commit::addChild(std::shared_ptr<Commit> child)
 {
 	if (child->getID() == getID())
 	{
-		throw std::invalid_argument("Cannot add itself as a child!");
+		throw "Cannot add itself as a child!";
 	}
 
 	this->children.push_back(child);
@@ -77,7 +77,7 @@ void Commit::removeParent(int id)
 
 	if (index == -1)
 	{
-		throw std::invalid_argument("Cannot find parent!");
+		throw "Cannot find parent!";
 	}
 
 	this->parents.erase(this->parents.begin() + index);
@@ -97,7 +97,7 @@ void Commit::removeChild(int id)
 
 	if (index == -1)
 	{
-		throw std::invalid_argument("Cannot find child!");
+		throw "Cannot find child!";
 	}
 
 	this->children.erase(this->children.begin() + index);

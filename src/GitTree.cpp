@@ -16,7 +16,7 @@ GitTree::GitTree()
 	this->commits.push_back(firstCommit);
 	this->head = firstCommit;
 	this->numBranches = 1;
-  this->branch_heads.push_back(this->head);
+    this->branch_heads.push_back(this->head);
 }
 
 std::shared_ptr<Commit> GitTree::getCommit(int ID) const
@@ -33,7 +33,7 @@ std::shared_ptr<Commit> GitTree::getCommit(int ID) const
 	// The ID didn't exist!
 	std::ostringstream msg;
 	msg << "ID " << ID << " not found!";
-	throw std::invalid_argument(msg.str());
+	throw msg.str();
 }
 
 std::shared_ptr<Commit> GitTree::getHead() const
@@ -60,7 +60,7 @@ std::shared_ptr<Commit> GitTree::getLatest() const
 std::shared_ptr<Commit> GitTree::getLatest(int branchID) const
 {
   if (branchID < 0 || this->numBranches <= branchID) {
-    throw std::invalid_argument("branchId must be between 0 and numBranches");
+    throw "branchId must be between 0 and numBranches";
   }
 
 	std::shared_ptr<Commit> latest = NULL;
@@ -138,7 +138,7 @@ bool GitTree::isValidCommitID(int id) const
 std::shared_ptr<Commit> GitTree::addCommit() {
   for (auto child : this->head->getChildren()) {
     if (child->getBranch() == this->currentBranch) {
-      throw std::invalid_argument("cannot make second child on same branch");
+      throw "cannot make second child on same branch";
     }
   }
 
@@ -158,14 +158,14 @@ std::shared_ptr<Commit> GitTree::addCommit() {
 std::shared_ptr<Commit> GitTree::merge(int branchID)
 {
   if (this->currentBranch == branchID) {
-    throw std::invalid_argument("Cannot merge branch into itself");
+    throw "Cannot merge branch into itself";
   }
   if (!this->getLatest(this->currentBranch)) {
-    throw std::invalid_argument("Cannot merge into empty branch");
+    throw "Cannot merge into empty branch";
   }
   auto latest = this->getLatest(branchID);
   if (!latest) {
-    throw std::invalid_argument("Cannot merge from empty branch");
+    throw "Cannot merge from empty branch";
   }
 	this->addCommit();
   this->head->addParent(latest);
@@ -176,7 +176,7 @@ std::shared_ptr<Commit> GitTree::merge(int branchID)
 void GitTree::checkout(int branchID)
 {
   if (branchID < 0 || branchID >= this->numBranches) {
-    throw std::invalid_argument("branchID not positive or too big");
+    throw "branchID not positive or too big";
   }
   this->currentBranch = branchID;
 
@@ -232,15 +232,16 @@ void GitTree::undo()
 void GitTree::reset()
 {
 	this->commits.clear();
-  this->branch_heads.clear();
+    this->branch_heads.clear();
 	this->nextCommitID = 0;
 	this->nextBranchID = 0;
 
 	auto firstCommit = std::make_shared<Commit>(nextBranchID++, nextCommitID++);
 	this->commits.push_back(firstCommit);
-	this->head = firstCommit;
-  this->branch_heads.push_back(this->head);
+    this->head = firstCommit;
+    this->branch_heads.push_back(this->head);
 	this->numBranches = 1;
+    this->currentBranch = 0;
 }
 
 void GitTree::print() const
