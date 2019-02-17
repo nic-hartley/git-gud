@@ -9,7 +9,7 @@ extern "C" {
   extern void start_draw(int x, int y);
   extern void translate(int x, int y);
   extern void end_draw();
-  extern void draw_commit_circle(int ID, int x, int y, const char* color, bool isHead);
+  extern void draw_commit_circle(int ID, int x, int y, bool isHead);
   extern void draw_columns(int numColumns, int current);
   extern void connect_circles(int tx, int ty, int bx, int by, bool isMerge);
 }
@@ -21,7 +21,6 @@ int main() {
 }
 
 extern "C" {
-
   EMSCRIPTEN_KEEPALIVE
   void draw() {
     auto head = tree.getHead();
@@ -29,16 +28,7 @@ extern "C" {
     draw_columns(tree.getNumBranches(), tree.getCurrentBranch());
     translate(0, 10);
     for (auto commit : tree.getAllCommits()) {
-
-      if (!tree.isHead(commit->getID())) {
-        draw_commit_circle(commit->getID(),commit->getBranch(), commit->getID(),
-          "#85c1e9", false);
-      }
-
-      else {
-        draw_commit_circle(commit->getID(),commit->getBranch(), commit->getID(),
-          "#00FF00", true);
-      }
+      draw_commit_circle(commit->getID(),commit->getBranch(), commit->getID(), tree.isHead(commit->getID()));
 
       for (auto parent : commit->getParents()) {
         connect_circles(

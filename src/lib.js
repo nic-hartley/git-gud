@@ -1,10 +1,9 @@
 mergeInto(LibraryManager.library, {
-  draw_commit_circle: function(ID, x, y, color, isHead) {
-
+  draw_commit_circle: function(ID, x, y, isHead) {
     if (isHead) {
       ctx.beginPath();
       ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS*0.75, 0, 2*Math.PI);
-      ctx.fillStyle = UTF8ToString(color, 8);
+      ctx.fillStyle = "#00FF00";
       ctx.fill();
 
       ctx.beginPath();
@@ -18,7 +17,7 @@ mergeInto(LibraryManager.library, {
       ctx.strokeStyle = "black";
       ctx.lineWidth = 2;
       ctx.stroke();
-      ctx.fillStyle = UTF8ToString(color, 8);
+      ctx.fillStyle = "#85c1e9";
       ctx.fill();
     }
 
@@ -31,116 +30,71 @@ mergeInto(LibraryManager.library, {
   },
   
   connect_circles: function(topX, topY, botX, botY, isMerge) {
-
     ctx.beginPath();
     // move to middle bottom of first circle
     ctx.moveTo(centerX(topX), centerY(topY) + CIRCLE_RADIUS);
 
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 2;
-
     // If botX == botY, it's a straight line
     if (botX == topX) {
       ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
-      ctx.stroke();
-    }
-
-    // Merge to the right
-    else if (isMerge && botX > topX) {
+    } else if (isMerge && botX > topX) {
       ctx.lineTo(centerX(topX), centerY(botY) - CIRCLE_RADIUS - VERT_MARGIN - LINE_ARC_RADIUS);
-      ctx.stroke();
-
       ctx.arc(centerX(topX) + LINE_ARC_RADIUS,
               centerY(botY) - CIRCLE_RADIUS - VERT_MARGIN - LINE_ARC_RADIUS,
               LINE_ARC_RADIUS,
-              Math.PI,
-              Math.PI/2,
-              true);
-      ctx.stroke();
-
+              Math.PI, Math.PI/2, true);
       ctx.lineTo(centerX(botX) - LINE_ARC_RADIUS,
                  centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN));
-      ctx.stroke();
       ctx.arc(centerX(botX) - LINE_ARC_RADIUS,
               centerY(botY) - CIRCLE_RADIUS - LINE_ARC_RADIUS,
               LINE_ARC_RADIUS,
               1.5*Math.PI,
               0);
-      ctx.stroke();
-
       ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
-    }
-
-    // Merge to the left
-    else if (isMerge && botX < topX) {
+    } else if (isMerge && botX < topX) {
       ctx.lineTo(centerX(topX), centerY(botY) - CIRCLE_RADIUS - VERT_MARGIN - LINE_ARC_RADIUS);
-      ctx.stroke();
-
       ctx.arc(centerX(topX) - LINE_ARC_RADIUS,
               centerY(botY) - CIRCLE_RADIUS - VERT_MARGIN - LINE_ARC_RADIUS,
               LINE_ARC_RADIUS,
-              0,
-              Math.PI/2);
-      ctx.stroke();
-
+              0, Math.PI / 2);
       ctx.lineTo(centerX(botX) + LINE_ARC_RADIUS,
                  centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN));
-      ctx.stroke();
       ctx.arc(centerX(botX) + LINE_ARC_RADIUS,
               centerY(botY) - CIRCLE_RADIUS - LINE_ARC_RADIUS,
               LINE_ARC_RADIUS,
-              1.5*Math.PI,
-              Math.PI,
-              true);
-      ctx.stroke();
-
+              1.5*Math.PI, Math.PI, true);
       ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
-    }
-
-    // If botX is greater than topX, it's a branch, and the
-    // branch line should be near the top
-    else if (botX > topX) {
+    } else if (botX > topX) {
       ctx.lineTo(centerX(topX), centerX(topY) + CIRCLE_RADIUS + LINE_ARC_RADIUS);
-      ctx.stroke();
       ctx.arc(centerX(topX) + LINE_ARC_RADIUS,
               centerY(topY) + CIRCLE_RADIUS + LINE_ARC_RADIUS,
               LINE_ARC_RADIUS,
-              Math.PI,
-              Math.PI/2,
-              true); // counterclockwise
-      ctx.stroke();
-
+              Math.PI, Math.PI / 2, true); // counterclockwise
       ctx.lineTo(centerX(botX) - LINE_ARC_RADIUS, centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN));
-      ctx.stroke();
       ctx.arc(centerX(botX)-LINE_ARC_RADIUS,
               centerY(topY) + CIRCLE_RADIUS + VERT_MARGIN + LINE_ARC_RADIUS,
               LINE_ARC_RADIUS,
-              1.5*Math.PI,
-              0);
-      ctx.stroke();
-
+              1.5 * Math.PI, 0);
       ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
-      ctx.stroke();
     }
+
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+    ctx.stroke();
   },
 
   draw_columns: function(numColumns, current) {
-
     ctx.beginPath();
     ctx.strokeStyle = "gray";
     ctx.lineWidth = 1;
 
-    for (var i = 0; i < numColumns; i++) {
-      var xpos = COL_WIDTH * (i+1);
-      ctx.moveTo(xpos, 0);
-      ctx.lineTo(xpos, canvas.height);
-      ctx.stroke();
+    ctx.fillStyle = "#AAAAAAAA";
+    ctx.fillRect(COL_WIDTH * current, 0, COL_WIDTH, canvas.height);
 
-      // Fill in the current column
-      if (i == current) {
-        ctx.fillStyle = "#AAAAAAAA"
-        ctx.fillRect(COL_WIDTH * i, 0, COL_WIDTH, canvas.height);
-      }
+    for (var i = 0; i < numColumns; i++) {
+      var rightSide = COL_WIDTH * (i+1);
+      ctx.moveTo(rightSide, 0);
+      ctx.lineTo(rightSide, canvas.height);
 
       // Draw the branch ID in the center
       ctx.font = "10px Arial";
@@ -149,6 +103,7 @@ mergeInto(LibraryManager.library, {
       var leftOffset = ctx.measureText(text).width / 2;
       ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH/2 - leftOffset,10);
     }
+    ctx.stroke();
   },
 
   start_draw: function(x, y) {
