@@ -25,5 +25,16 @@ mergeInto(LibraryManager.library, {
     ctx.stroke();
   },
 
-  print: function(what) { console.log(what); },
+  set_relative_to: function(x, y) {
+    relativeToX = x;
+    relativeToY = y;
+  },
+
+  main_done: function() {
+    Module._draw();
+  },
+
+  print: function(what) {
+    console.log(UTF8ToString(what));
+  },
 });

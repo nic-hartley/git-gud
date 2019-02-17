@@ -21,3 +21,18 @@
 input:focus, select:focus, textarea:focus, button:focus {
     outline: none;
 }
+#history{
+    background-color: black;
+    font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace; 
+    color: white;
+    width: 34%;
+    resize: none;
+    overflow: hidden;
+    text-align: top;
+    vertical-align: top;
+    font-size: 19px;
+}
+#canvas{
+/*    float: left;*/
+/*    clear: both;*/
+}

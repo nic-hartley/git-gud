@@ -16,7 +16,6 @@ namespace git_gud
 	 */
 	class Commit
 	{
-
 		private:
 
 			int commitID;
@@ -24,11 +23,6 @@ namespace git_gud
 
 			std::vector<std::shared_ptr<Commit> > parents;
 			std::vector<std::shared_ptr<Commit> > children;
-
-			/**
-			 * @return Returns a unique, sequential ID.
-			 */
-			int generateID();
 
 		public:
 
@@ -99,17 +93,19 @@ namespace git_gud
 	{
 		private:
 
+			int nextCommitID = 0;
+			int nextBranchID = 0;
+
 			std::shared_ptr<Commit> head;
 			std::vector<std::shared_ptr<Commit> > commits;
 			int numBranches = 0;
-
-			int generateBranchID();
 
 		public:
 
 			GitTree();
 
 			std::shared_ptr<Commit> getHead() const;
+			bool isHead(int commitID) const;
 			std::shared_ptr<Commit> getCommit(int ID) const;
 			std::shared_ptr<Commit> getLatest() const;
 			std::shared_ptr<Commit> getLatest(int branchID) const;
@@ -203,6 +199,9 @@ namespace git_gud
 			void undo();
 
 			void print() const;
+
+			static int generateBranchID();
+			static int decrementBranchID();
 	};
 }
 
