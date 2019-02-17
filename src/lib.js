@@ -51,10 +51,9 @@ mergeInto(LibraryManager.library, {
     // If botX is less than topX, it's a merge, and the line should
     // be near the bottom
     else if (isMerge) {
-      console.log("is merge");
-      ctx.lineTo(centerX(topX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN/2));
+      ctx.lineTo(centerX(topX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN));
       ctx.stroke();
-      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN/2));
+      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN));
       ctx.stroke();
       ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
       ctx.stroke();
@@ -63,9 +62,9 @@ mergeInto(LibraryManager.library, {
     // If botX is greater than topX, it's a branch, and the
     // branch line should be near the top
     else if (botX > topX) {
-      ctx.lineTo(centerX(topX), centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN/2));
+      ctx.lineTo(centerX(topX), centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN));
       ctx.stroke();
-      ctx.lineTo(centerX(botX), centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN/2));
+      ctx.lineTo(centerX(botX), centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN));
       ctx.stroke();
       ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS );
       ctx.stroke();
