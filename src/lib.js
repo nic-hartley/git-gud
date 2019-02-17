@@ -30,21 +30,19 @@ mergeInto(LibraryManager.library, {
     ctx.beginPath();
     // move to middle bottom of first circle
     ctx.moveTo(centerX(topX), centerY(topY) + CIRCLE_RADIUS);
-    // draw a line a little bit down (halfway into the gap)
-    ctx.lineTo(centerX(topX), centerY(topY) + CIRCLE_RADIUS + VERT_MARGIN);
-    // draw a line across to line up with the bottom
-    ctx.lineTo(centerX(botX), centerY(topY) + CIRCLE_RADIUS + VERT_MARGIN);
-    // draw a line down to the top middle of that circle
-    ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
-    // and actually draw it onto the canvas
+    // do a pretty arc to the top of the last circle
+    ctx.bezierCurveTo(
+      centerX(topX), centerY(botY) - CIRCLE_RADIUS,
+      centerX(botX), centerY(topY) + CIRCLE_RADIUS + VERT_MARGIN,
+      centerX(botX), centerY(botY) - CIRCLE_RADIUS
+    );
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 2;
     ctx.stroke();
   },
 
   set_relative_to: function(x, y) {
-    relativeToX = x;
-    relativeToY = y;
+    // ctx.translate(centerX(x), centerY(y));
   },
 
   main_done: function() {
