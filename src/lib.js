@@ -19,7 +19,7 @@ mergeInto(LibraryManager.library, {
     ctx.save();
     ctx.resetTransform();
     ctx.beginPath();
-    ctx.rect(0, 15, canvas.width, canvas.height);
+    ctx.rect(0, 19, canvas.width, canvas.height);
     ctx.restore();
 
     ctx.save(); // vertical shift + clip
