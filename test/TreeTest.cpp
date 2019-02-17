@@ -71,6 +71,18 @@ int main (void)
 	std::cout << "Has branch 3: " << tree.isValidBranchID(3) << "\n";
 	std::cout << "Had branch 5: " << tree.isValidBranchID(5) << "\n";
 
+	std::cout << "Get all commits\n";
+	auto commits = tree.getAllCommits();
+
+	for (auto ptr : commits)
+	{
+		ptr->print();
+	}
+
+	std::cout << "Resetting!\n";
+	tree.reset();
+	tree.print();
+
 	// SUCCESSFULLY ERRORS
 	//std:: cout << "Merging with non-existant branch 5\n";
 	//tree.merge(7);
