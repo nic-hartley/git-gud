@@ -133,10 +133,10 @@ std::shared_ptr<Commit> GitTree::addCommitNewBranch(int parentID)
 	return commit;
 }
 
-std::shared_ptr<Commit> GitTree::merge(int otherID)
+std::shared_ptr<Commit> GitTree::merge(int branchID)
 {
-	// will throw invalid_argument if otherID not found
-	return merge(this->head->getID(), otherID);
+	// will throw invalid_argument if branchID not found
+	return merge(this->head->getID(), getLatest(branchID)->getID());
 }
 
 std::shared_ptr<Commit> GitTree::merge(int parent1ID, int parent2ID)

@@ -168,13 +168,13 @@ namespace git_gud
 
 			/**
 			 * Creates a new commit, appended to the head and with
-			 * the given commit as its other parent.
+			 * the given branch's latest commit.
 			 *
-			 * @param otherID ID of the commit to merge into the head.
+			 * @param branchID ID of the branch to merge into the head.
 			 * @return Returns the new Commit.
 			 * @throws std::invalid_argument if otherID doesn't exist.
 			 */
-			std::shared_ptr<Commit> merge(int otherID);
+			std::shared_ptr<Commit> merge(int branchID);
 
 			/**
 			 * Creates a new commit, appended to the parentID and
