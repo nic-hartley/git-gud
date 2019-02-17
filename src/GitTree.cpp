@@ -1,5 +1,6 @@
 #include "git-gud.hpp"
 
+#include <iostream>
 #include <memory>
 #include <vector>
 #include <stdexcept>
@@ -8,7 +9,10 @@ using namespace git_gud;
 
 GitTree::GitTree()
 {
-	addCommit();
+	auto firstCommit = std::make_shared<Commit>(generateBranchID());
+	this->commits.push_back(firstCommit);
+	this->head = firstCommit;
+	this->numBranches = 1;
 }
 
 int GitTree::generateBranchID()
@@ -32,6 +36,11 @@ std::shared_ptr<Commit> GitTree::getCommit(int ID) const
 	throw std::invalid_argument("ID not found!");
 }
 
+std::shared_ptr<Commit> GitTree::getHead() const
+{
+	return this->head;
+}
+
 std::shared_ptr<Commit> GitTree::getLatest() const
 {
 	if (this->commits.empty()) {return NULL;}
@@ -48,6 +57,12 @@ std::shared_ptr<Commit> GitTree::getLatest(int branchID) const
 			latest = ptr;
 		}
 	}
+
+	if (latest == NULL)
+	{
+		throw std::invalid_argument("Branch does not exist!");
+	}
+
 	return latest;
 }
 
@@ -68,57 +83,134 @@ int GitTree::getNumCommits() const
 
 std::shared_ptr<Commit> GitTree::addCommit()
 {
-	auto commit = std::make_shared<Commit>(generateBranchID());
-
-	this->commits.push_back(commit);
-	this->numBranches++;
-
-	return commit;
+	int parent = this->head->getID();
+	return addCommit(parent);
 }
 
 std::shared_ptr<Commit> GitTree::addCommit(int parentID)
 {
+	// will throw invalid_argument if not found
 	auto parent = getCommit(parentID);
+
+	// Parents cannot have more than one child in the same branch!
+	for (auto child : parent->getChildren())
+	{
+		if (child->getID() == parent->getID())
+		{
+			throw std::invalid_argument("Create a new branch!");
+		}
+	}
+
 	auto commit = std::make_shared<Commit>(parent->getBranch());
 
 	commit->addParent(parent);
 	parent->addChild(commit);
 
+	checkout(commit);
 	this->commits.push_back(commit);
 
 	return commit;
 }
 
+std::shared_ptr<Commit> GitTree::addCommitNewBranch()
+{
+	return addCommitNewBranch(this->head->getID());
+}
+
 std::shared_ptr<Commit> GitTree::addCommitNewBranch(int parentID)
 {
+	// throws invalid_argument if parent not found
 	auto parent = getCommit(parentID);
 	auto commit = std::make_shared<Commit>(generateBranchID());
 
 	commit->addParent(parent);
 	parent->addChild(commit);
 
+	checkout(commit);
 	this->commits.push_back(commit);
 	this->numBranches++;
 
 	return commit;
 }
 
+std::shared_ptr<Commit> GitTree::merge(int otherID)
+{
+	// will throw invalid_argument if otherID not found
+	return merge(this->head->getID(), otherID);
+}
+
+std::shared_ptr<Commit> GitTree::merge(int parent1ID, int parent2ID)
+{
+
+	// Cannot merge a commit into itself
+	if (parent1ID == parent2ID)
+	{
+		throw std::invalid_argument("Can't merge into itself!");
+	}
+
+	// Connect it to the merging parent
+	// getCommit() will throw invalid_argument if not found
+	auto primaryParent = getCommit(parent1ID);
+	auto otherParent = getCommit(parent2ID);
+
+	auto child = addCommit(primaryParent->getID());
+
+	child->addParent(otherParent);
+	otherParent->addChild(child);
+
+	return child;
+}
+
+void GitTree::checkout(int commitID)
+{
+	// getCommit() will throw invalid_argument if not found
+	checkout(getCommit(commitID));
+}
+
+void GitTree::checkout(std::shared_ptr<Commit> commit)
+{
+	this->head = commit;
+}
+
 void GitTree::undo()
 {
+	// Don't undo the first commit
 	if (this->commits.size() <= 1) { return; }
 
 	auto last = getLatest();
+	this->commits.pop_back();
+
+	// If the head is at the undone commit, move it to the previous commit
+	if (this->head->getID() == last->getID())
+	{
+		std::cout << "Moving head to\n";
+		getLatest()->print();
+		this->head = getLatest();
+	}
+
 	auto parents = last->getParents();
 
 	for (auto parent : parents)
 	{
 		parent->removeChild(last->getID());
 	}
-
-	this->commits.pop_back();
 }
 
 void GitTree::print() const
 {
-	for (auto ptr : this->commits) {ptr->print();}
+	std::cout << "...\n";
+	std::cout << "GitTree\n";
+	std::cout << "Number of branches: " << getNumBranches() << "\n";
+	std::cout << "Number of commits: " << getNumCommits() << "\n";
+
+	for (auto ptr : this->commits) {
+
+		if (this->head == ptr)
+		{
+			std::cout << "HEAD\n";
+		}
+		ptr->print();
+	}
+
+	std::cout << "...\n";
 }
