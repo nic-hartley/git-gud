@@ -26,6 +26,24 @@ int Commit::generateID()
 
 int Commit::getID() const {return this->commitID;}
 int Commit::getBranch() const {return this->branchID;}
+int Commit::getNumParents() const {return this->parents.size();}
+int Commit::getNumChildren() const {return this->children.size();}
+bool Commit::isMergeCommit() const {return getNumParents() >= 2;}
+bool Commit::isNewBranch() const
+{
+	if (isMergeCommit()) {return false;}
+	if (getNumParents() == 0) {return true;}
+	else
+	{
+		auto parent = this->parents[0];
+		if (parent->getBranch() != this->getBranch())
+		{
+			return true;
+		}
+
+		return false;
+	}
+}
 
 std::vector<std::shared_ptr<Commit> >& Commit::getParents()
 {
@@ -39,11 +57,21 @@ std::vector<std::shared_ptr<Commit> >& Commit::getChildren()
 
 void Commit::addParent(std::shared_ptr<Commit> parent)
 {
+	if (parent->getID() == getID())
+	{
+		throw std::invalid_argument("Cannot add itself as a parent!");
+	}
+
 	this->parents.push_back(parent);
 }
 
 void Commit::addChild(std::shared_ptr<Commit> child)
 {
+	if (child->getID() == getID())
+	{
+		throw std::invalid_argument("Cannot add itself as a child!");
+	}
+
 	this->children.push_back(child);
 }
 
@@ -61,7 +89,7 @@ void Commit::removeParent(int id)
 
 	if (index == -1)
 	{
-		throw std::invalid_argument("Cannot find ID!");
+		throw std::invalid_argument("Cannot find parent!");
 	}
 
 	this->parents.erase(this->parents.begin() + index);
@@ -81,7 +109,7 @@ void Commit::removeChild(int id)
 
 	if (index == -1)
 	{
-		throw std::invalid_argument("Cannot find ID!");
+		throw std::invalid_argument("Cannot find child!");
 	}
 
 	this->children.erase(this->children.begin() + index);

@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <map>
 
 namespace git_gud
 {
@@ -49,14 +50,46 @@ namespace git_gud
 
 			int getID() const;
 			int getBranch() const;
+			int getNumParents() const;
+			int getNumChildren() const;
+			bool isMergeCommit() const;
+			bool isNewBranch() const;
+
 			std::vector<std::shared_ptr<Commit> >& getParents();
 			std::vector<std::shared_ptr<Commit> >& getChildren();
 
+			/**
+			 * Adds the given commit as a parent. Does NOT update the
+			 * parent commit to reflect the change.
+			 *
+			 * @param parent Parent commit to add.
+			 * @throws std::invalid_argument if adding itself as a parent.
+			 */
 			void addParent(std::shared_ptr<Commit> parent);
+
+			/**
+			 * Adds the given commit as a child. Does NOT update the
+			 * child commit to reflect the change.
+			 *
+			 * @param child Child commit to add.
+			 * @throws std::invalid_argument if adding itself as a child.
+			 */
 			void addChild(std::shared_ptr<Commit> child);
 
-			// not implemented
+			/**
+			 * Removes the parent commit from this object.
+			 *
+			 * @param id ID of the parent commit.
+			 * @throws std::invalid_argument if parent does not exist.
+			 */
 			void removeParent(int id);
+
+			/**
+			 * Removes the child commit from this object.
+			 *
+			 * @param id ID of the child commit.
+			 * @throws std::invalid_argument if child does not exist.
+			 */
 			void removeChild(int id);
 
 			void print();
@@ -66,6 +99,7 @@ namespace git_gud
 	{
 		private:
 
+			std::shared_ptr<Commit> head;
 			std::vector<std::shared_ptr<Commit> > commits;
 			int numBranches = 0;
 
@@ -75,23 +109,92 @@ namespace git_gud
 
 			GitTree();
 
+			std::shared_ptr<Commit> getHead() const;
 			std::shared_ptr<Commit> getCommit(int ID) const;
-
 			std::shared_ptr<Commit> getLatest() const;
 			std::shared_ptr<Commit> getLatest(int branchID) const;
+
+			/** Guaranteed to have non-repeating IDs. */
+			std::vector<int> getAllBranchIDs() const;
+
+			/** If it has the same ID twice, something is very wrong. */
+			std::vector<int> getAllCommitIDs() const;
+
+			bool isValidCommitID(int id) const;
+			bool isValidBranchID(int id) const;
 
 			std::vector<std::shared_ptr<Commit> >& getAllCommits();
 			int getNumBranches() const;
 			int getNumCommits() const;
 
 			/**
-			 * Generates a new Commit on a new Branch, with no parents.
+			 * Generates a new Commit as a child of the head.
+			 * Checks out the new Commit.
 			 *
-			 * @param Returns the generated Commit.
+			 * @return Returns the generated Commit.
+			 * @throws std::invalid_argument if HEAD already has a child.
 			 */
 			std::shared_ptr<Commit> addCommit();
+
+			/**
+			 * Generates a new Commit as a child of the specified parent,
+			 * on the same branch. Checks out the new Commit.
+`			 *
+			 * @param parentID ID of the commit to add to.
+			 * @throws std::invalid_argument if parent already has a child,
+			 *         or does not exist.
+			 */
 			std::shared_ptr<Commit> addCommit(int parentID);
+
+
+			/**
+			 * Creates a new branch at HEAD.
+			 */
+			std::shared_ptr<Commit> addCommitNewBranch();
+
+			/**
+			 * Generates a new Commit as a child of the specified parent,
+			 * on a new branch.
+			 *
+			 * @throws std::invalid_argument if parent not found.
+			 */
 			std::shared_ptr<Commit> addCommitNewBranch(int parentID);
+
+			/**
+			 * Sets the head of the tree to the latest commit on the branch.
+			 *
+			 * @param beanchID ID of the branch to checkout.
+			 * @throws std::invalid_argument if branchID does not exist.
+			 */
+			void checkout(int branchID);
+
+			/**
+			 * Sets the head of the tree to a specific commit.
+			 *
+			 * @param Commit to set.
+			 */
+			void checkoutCommit(int commit);
+
+			/**
+			 * Creates a new commit, appended to the head and with
+			 * the given branch's latest commit.
+			 *
+			 * @param branchID ID of the branch to merge into the head.
+			 * @return Returns the new Commit.
+			 * @throws std::invalid_argument if otherID doesn't exist.
+			 */
+			std::shared_ptr<Commit> merge(int branchID);
+
+			/**
+			 * Creates a new commit, appended to the parentID and
+			 * merged with the other.
+			 *
+			 * @param parentID ID of the parent to merge onto.
+			 * @param otherID ID of the brange to merge from.
+			 * @return Return's the newly created commit.
+			 * @throws std::invalid_argument if either commit doesn't exist.
+			 */
+			std::shared_ptr<Commit> merge(int parentID, int otherID);
 
 			/**
 			 * Removes the last Commit from the tree. If there is
