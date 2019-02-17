@@ -5,7 +5,7 @@
 extern "C" {
   extern void print(const char* message);
   extern void main_done();
-  extern void set_relative_to(int x, int y);
+  extern void start_draw(int x, int y);
   extern void draw_commit_circle(int x, int y, const char* color, bool isHead);
   extern void connect_circles(int tx, int ty, int bx, int by);
 }
@@ -20,7 +20,7 @@ extern "C" {
   EMSCRIPTEN_KEEPALIVE
   void draw() {
     auto head = tree.getHead();
-    set_relative_to(head->getBranch(), head->getID());
+    start_draw(head->getBranch(), head->getID());
     for (auto commit : tree.getAllCommits()) {
       draw_commit_circle(commit->getBranch(), commit->getID(),
         "#85c1e9", tree.isHead(commit->getID())
@@ -33,19 +33,40 @@ extern "C" {
       }
     }
   }
-
+  
   EMSCRIPTEN_KEEPALIVE
-  void checkout_commit(int id) {
-    tree.checkoutCommit(id);
-  }
-
-  EMSCRIPTEN_KEEPALIVE
-  void checkout_branch(int id) {
-    tree.checkout(id);
+  void init() {
+    print("init");
+    tree.reset();
   }
 
   EMSCRIPTEN_KEEPALIVE
   void commit() {
+    print("commit");
     tree.addCommit();
+  }
+
+  EMSCRIPTEN_KEEPALIVE
+  void branch() {
+    print("branch");
+    tree.branch();
+  }
+
+  EMSCRIPTEN_KEEPALIVE
+  void merge(int branch) {
+    print("merge");
+    tree.merge(branch);
+  }
+
+  EMSCRIPTEN_KEEPALIVE
+  void checkout_branch(int branch) {
+    print("checkout_branch");
+    tree.checkout(branch);
+  }
+
+  EMSCRIPTEN_KEEPALIVE
+  void checkout_commit(int commit) {
+    print("checkout_commit");
+    tree.checkoutCommit(commit);
   }
 }
