@@ -12,33 +12,33 @@ using namespace git_gud;
 
 GitTree::GitTree()
 {
-	auto firstCommit = std::make_shared<Commit>(nextBranchID++, nextCommitID++);
-	this->commits.push_back(firstCommit);
-	this->head = firstCommit;
-	this->numBranches = 1;
+    auto firstCommit = std::make_shared<Commit>(nextBranchID++, nextCommitID++);
+    this->commits.push_back(firstCommit);
+    this->head = firstCommit;
+    this->numBranches = 1;
   this->branch_heads.push_back(this->head);
 }
 
 std::shared_ptr<Commit> GitTree::getCommit(int ID) const
 {
-	// Iterate through the commit list
-	for (std::shared_ptr<Commit> c_ptr : this->commits)
-	{
-		if (c_ptr->getID() == ID)
-		{
-			return c_ptr;
-		}
-	}
+    // Iterate through the commit list
+    for (std::shared_ptr<Commit> c_ptr : this->commits)
+    {
+        if (c_ptr->getID() == ID)
+        {
+            return c_ptr;
+        }
+    }
 
-	// The ID didn't exist!
-	std::ostringstream msg;
-	msg << "ID " << ID << " not found!";
-	throw std::invalid_argument(msg.str());
+    // The ID didn't exist!
+    std::ostringstream msg;
+    msg << "ID " << ID << " not found!";
+    throw msg.str();
 }
 
 std::shared_ptr<Commit> GitTree::getHead() const
 {
-	return this->head;
+    return this->head;
 }
 
 int GitTree::getCurrentBranch() const
@@ -48,97 +48,97 @@ int GitTree::getCurrentBranch() const
 
 bool GitTree::isHead(int commitID) const
 {
-	return this->head->getID() == commitID;
+    return this->head->getID() == commitID;
 }
 
 std::shared_ptr<Commit> GitTree::getLatest() const
 {
-	if (this->commits.empty()) {return NULL;}
-	return this->commits.back();
+    if (this->commits.empty()) {return NULL;}
+    return this->commits.back();
 }
 
 std::shared_ptr<Commit> GitTree::getLatest(int branchID) const
 {
   if (branchID < 0 || this->numBranches <= branchID) {
-    throw std::invalid_argument("branchId must be between 0 and numBranches");
+    throw "branchId must be between 0 and numBranches";
   }
 
-	std::shared_ptr<Commit> latest = NULL;
-	for (auto ptr : this->commits)
-	{
-		if (ptr->getBranch() == branchID)
-		{
-			latest = ptr;
-		}
-	}
+    std::shared_ptr<Commit> latest = NULL;
+    for (auto ptr : this->commits)
+    {
+        if (ptr->getBranch() == branchID)
+        {
+            latest = ptr;
+        }
+    }
 
-	return latest;
+    return latest;
 }
 
 std::vector<std::shared_ptr<Commit> >& GitTree::getAllCommits()
 {
-	return this->commits;
+    return this->commits;
 }
 
 int GitTree::getNumBranches() const
 {
-	return this->numBranches;
+    return this->numBranches;
 }
 
 int GitTree::getNumCommits() const
 {
-	return this->commits.size();
+    return this->commits.size();
 }
 
 std::vector<int> GitTree::getAllBranchIDs() const
 {
-	std::vector<int> ids;
+    std::vector<int> ids;
 
-	// iterate through all commits
-	for (auto commit : this->commits)
-	{
-		// check if the commit's branch is already in the list
-		if(std::find(ids.begin(), ids.end(), commit->getBranch()) == ids.end())
-		{
-    		// ID not already added
-    		ids.push_back(commit->getBranch());
-		}
-	}
+    // iterate through all commits
+    for (auto commit : this->commits)
+    {
+        // check if the commit's branch is already in the list
+        if(std::find(ids.begin(), ids.end(), commit->getBranch()) == ids.end())
+        {
+            // ID not already added
+            ids.push_back(commit->getBranch());
+        }
+    }
 
-	return ids;
+    return ids;
 }
 
 std::vector<int> GitTree::getAllCommitIDs() const
 {
-	std::vector<int> ids;
-	for (auto commit : this->commits)
-	{
-		ids.push_back(commit->getID());
-	}
+    std::vector<int> ids;
+    for (auto commit : this->commits)
+    {
+        ids.push_back(commit->getID());
+    }
 
-	return ids;
+    return ids;
 }
 
 bool GitTree::isValidBranchID(int id) const
 {
-	auto ids = getAllBranchIDs();
+    auto ids = getAllBranchIDs();
 
-	// If the id is found, then it is valid
-	return std::find(ids.begin(), ids.end(), id) != ids.end();
+    // If the id is found, then it is valid
+    return std::find(ids.begin(), ids.end(), id) != ids.end();
 }
 
 bool GitTree::isValidCommitID(int id) const
 {
-	auto ids = getAllCommitIDs();
+    auto ids = getAllCommitIDs();
 
-	// If the id is found, then it is valid
-	return std::find(ids.begin(), ids.end(), id) != ids.end();
+    // If the id is found, then it is valid
+    return std::find(ids.begin(), ids.end(), id) != ids.end();
 }
 
 std::shared_ptr<Commit> GitTree::addCommit() {
   for (auto child : this->head->getChildren()) {
     if (child->getBranch() == this->currentBranch) {
-      throw std::invalid_argument("cannot make second child on same branch");
+      throw "cannot make second child on same branch";
     }
   }
 
@@ -152,22 +152,22 @@ std::shared_ptr<Commit> GitTree::addCommit() {
 
   this->commits.push_back(commit);
   
-	return commit;
+    return commit;
 }
 
 std::shared_ptr<Commit> GitTree::merge(int branchID)
 {
   if (this->currentBranch == branchID) {
-    throw std::invalid_argument("Cannot merge branch into itself");
+    throw "Cannot merge branch into itself";
   }
   if (!this->getLatest(this->currentBranch)) {
-    throw std::invalid_argument("Cannot merge into empty branch");
+    throw "Cannot merge into empty branch";
   }
   auto latest = this->getLatest(branchID);
   if (!latest) {
-    throw std::invalid_argument("Cannot merge from empty branch");
+    throw "Cannot merge from empty branch";
   }
-	this->addCommit();
+    this->addCommit();
   this->head->addParent(latest);
   latest->addChild(this->head);
   return this->head;
@@ -176,11 +176,11 @@ std::shared_ptr<Commit> GitTree::merge(int branchID)
 void GitTree::checkout(int branchID)
 {
   if (branchID < 0 || branchID >= this->numBranches) {
-    throw std::invalid_argument("branchID not positive or too big");
+    throw "branchID not positive or too big";
   }
   this->currentBranch = branchID;
 
-	// getLatest() will throw invalid_argument if not found
+    // getLatest() will throw invalid_argument if not found
   auto latest = getLatest(branchID);
   if (latest) {
     checkoutCommit(latest->getID());
@@ -194,72 +194,72 @@ int GitTree::branch() {
 
 void GitTree::checkoutCommit(int commit)
 {
-	this->head = getCommit(commit);
+    this->head = getCommit(commit);
   this->currentBranch = this->head->getBranch();
 }
 
 void GitTree::undo()
 {
-	// Don't undo the first commit
-	if (this->commits.size() <= 1) { return; }
+    // Don't undo the first commit
+    if (this->commits.size() <= 1) { return; }
 
-	auto last = getLatest();
-	this->commits.pop_back();
+    auto last = getLatest();
+    this->commits.pop_back();
 
-	// If the head is at the undone commit, move it to the previous commit
-	if (this->head->getID() == last->getID())
-	{
-		this->head = getLatest();
-	}
+    // If the head is at the undone commit, move it to the previous commit
+    if (this->head->getID() == last->getID())
+    {
+        this->head = getLatest();
+    }
 
-	// If it's a new branch, the number of branches is reduced by one
-	if (last->isNewBranch())
-	{
-		numBranches--;
-		nextBranchID--;
-	}
+    // If it's a new branch, the number of branches is reduced by one
+    if (last->isNewBranch())
+    {
+        numBranches--;
+        nextBranchID--;
+    }
 
-	auto parents = last->getParents();
+    auto parents = last->getParents();
 
-	for (auto parent : parents)
-	{
-		parent->removeChild(last->getID());
-	}
+    for (auto parent : parents)
+    {
+        parent->removeChild(last->getID());
+    }
 
-	nextCommitID--;
+    nextCommitID--;
 }
 
 void GitTree::reset()
 {
-	this->commits.clear();
-  this->branch_heads.clear();
-	this->nextCommitID = 0;
-	this->nextBranchID = 0;
+    this->commits.clear();
+    this->branch_heads.clear();
+    this->nextCommitID = 0;
+    this->nextBranchID = 0;
 
-	auto firstCommit = std::make_shared<Commit>(nextBranchID++, nextCommitID++);
-	this->commits.push_back(firstCommit);
-	this->head = firstCommit;
-  this->branch_heads.push_back(this->head);
-	this->numBranches = 1;
+    auto firstCommit = std::make_shared<Commit>(nextBranchID++, nextCommitID++);
+    this->commits.push_back(firstCommit);
+    this->head = firstCommit;
+    this->branch_heads.push_back(this->head);
+    this->numBranches = 1;
 }
 
 void GitTree::print() const
 {
-	std::cout << "...\n";
-	std::cout << "GitTree\n";
-	std::cout << "Number of branches: " << getNumBranches() << "\n";
-	std::cout << "Number of commits: " << getNumCommits() << "\n";
-	std::cout << "Next branch ID: " << nextBranchID << "\n";
-	std::cout << "Next commit ID: " << nextCommitID << "\n";
+    std::cout << "...\n";
+    std::cout << "GitTree\n";
+    std::cout << "Number of branches: " << getNumBranches() << "\n";
+    std::cout << "Number of commits: " << getNumCommits() << "\n";
+    std::cout << "Next branch ID: " << nextBranchID << "\n";
+    std::cout << "Next commit ID: " << nextCommitID << "\n";
 
-	for (auto ptr : this->commits) {
+    for (auto ptr : this->commits) {
 
-		if (this->head == ptr)
-		{
-			std::cout << "HEAD\n";
-		}
-		ptr->print();
-	}
+        if (this->head == ptr)
+        {
+            std::cout << "HEAD\n";
+        }
+        ptr->print();
+    }
 
-	std::cout << "...\n";
+    std::cout << "...\n";
 }

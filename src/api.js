@@ -25,9 +25,9 @@ function branch() {
 
 function merge(from) {
   if (from[0] === 'c') {
-    throw new Error("Can only merge branches");
+    throw "Can only merge branches";
   } else if (from[0] !== 'b') {
-    throw new Error("Specify a branch to merge");
+    throw "Specify a branch to merge";
   } else {
     Module._merge(parseInt(from.substr(1), 10));
   }
@@ -40,7 +40,7 @@ function checkout(branch) {
   } else if (branch[0] == 'c') {
     Module._checkout_commit(parseInt(branch.substr(1), 10));
   } else {
-    throw new Error("Specify a branch or commit to check out");
+    throw "Specify a branch or commit to check out";
   }
   Module._draw();
 }
