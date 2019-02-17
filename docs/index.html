@@ -55,18 +55,21 @@
           var x_split = x.split(' ');
           var text_hist = document.getElementById("history").innerHTML;
           var text="Invalid command entered";
-          console.log(text_hist);
-          if(x_split[1] == "commit"){
-              console.log("a");
+//          console.log(text_hist);
+          if(x_split[1] == "init"){
+              init();
+          }
+          else if(x_split[1] == "commit"){
+              commit();
           }
           else if(x_split[1] == "branch"){
-              console.log("a");
+              branch();
           }
-          else if(x_split[1] == "merge"){
-              console.log("a");
+          else if(x_split[1] == "merge" && x_split[2]!=""){
+              merge(x_split[2]);
           }
-          else if(x_split[1] == "checkout"){
-              console.log("a");
+          else if(x_split[1] == "checkout" && x_split[2]!=""){
+              checkout(x_split[2]);
           }
           else{
               document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:red;'>" + text + "</span>" ;
