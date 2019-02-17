@@ -85,7 +85,7 @@ mergeInto(LibraryManager.library, {
 
       // Fill in the current column
       if (i == current) {
-        ctx.draw_rect(xpos, 0, COL_WIDTH, canvas.height);
+        ctx.fillRect(xpos, 0, COL_WIDTH, canvas.height);
       }
 
       // Draw the branch ID in the center
