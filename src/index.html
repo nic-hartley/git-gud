@@ -12,7 +12,7 @@
     <br />      
     <div id="history"></div><br />
 <!--    <form id="command-prompt" autocomplete="off" spellcheck="false">-->
-      <span class="locked-text"> &gt;&nbsp;git&nbsp;</span><input autocomplete="off" spellcheck="false" autofocus="autofocus" type="text" maxlength="32" id="input-box-cmd" onkeypress="return noenter()" onKeyDown="if(event.keyCode==13) return hist()"/>
+      <span id="locked-text"> &gt;&nbsp;git&nbsp;</span><input autocomplete="off" spellcheck="false" autofocus="autofocus" type="text" maxlength="32" id="input-box-cmd" onkeypress="return noenter()" onKeyDown="if(event.keyCode==13) return hist()"/>
 <!--        <input type="submit" value="Go"/>-->
 <!--         <textarea name="Text1" cols="40" rows="5" value=" > git "></textarea> -->
 
@@ -27,7 +27,13 @@
       }
       function hist(){
         var old = document.getElementById("history").innerHTML;
-        var x = "git " + document.getElementById("input-box-cmd").value;
+        var x;
+        if(document.getElementById("input-box-cmd").value=="y" || document.getElementById("input-box-cmd").value=="n"){
+            x = document.getElementById("input-box-cmd").value;
+        }
+        else{
+            x = "git " + document.getElementById("input-box-cmd").value;
+        }
         document.getElementById("input-box-cmd").value = "" ;
 
 //        console.log(x);
@@ -35,7 +41,12 @@
           document.getElementById("history").innerHTML = x ;  
         }
         else{
-          document.getElementById("history").innerHTML = old + "<br />" + x;
+            if(x=="y" || x=="n"){
+                document.getElementById("history").innerHTML = old + " " + x;
+            }
+            else{
+            document.getElementById("history").innerHTML = old + "<br />" + x;
+            }
         }
         i=i+1;
                 
@@ -49,15 +60,34 @@
 //            old1 = $('history').val().replace(/^.*\n/g,"");
 //            $('history').val(old1);
 //        }
-        return false;
+//        return false;
       }
+      var flag=0;
       function action_process(x){
           var x_split = x.split(' ');
           var text_hist = document.getElementById("history").innerHTML;
           var text="Invalid command entered";
-//          console.log(text_hist);
-          if(x_split[1] == "init"){
+          var warning_text="This action is not reversible, Do you want to proceed [y/n]"
+//          console.log(x_split);
+          if(flag==1 || x_split[1] == "init"){
+              if(flag==0){
+              document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:yellow;'>" + warning_text + "</span>" ;
+              document.getElementById("locked-text").innerHTML = "[y/n]";
+              document.getElementById("input-box-cmd").style.width = "424px";
+              flag=1;
+              }
+              if(x_split[0] == "y"){
               init();
+              flag=0;
+              document.getElementById("locked-text").innerHTML = "&gt;&nbsp;git&nbsp;";
+              document.getElementById("input-box-cmd").style.width = "412px";
+              }
+              if(x_split[0] == "n"){
+              flag=0;
+              document.getElementById("locked-text").innerHTML = "&gt;&nbsp;git&nbsp;";
+              document.getElementById("input-box-cmd").style.width = "412px";
+              }
+              
           }
           else if(x_split[1] == "commit"){
               commit();
@@ -65,10 +95,10 @@
           else if(x_split[1] == "branch"){
               branch();
           }
-          else if(x_split[1] == "merge" && x_split[2]!=""){
+          else if(x_split[1] == "merge" && x_split[2]!=null){
               merge(x_split[2]);
           }
-          else if(x_split[1] == "checkout" && x_split[2]!=""){
+          else if(x_split[1] == "checkout" && x_split[2]!=null){
               checkout(x_split[2]);
           }
           else{
