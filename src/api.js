@@ -15,9 +15,9 @@ function branch(name) {
   console.log("would make new branch", name);
 }
 
-function merge(into, from) {
+function merge(into) {
   console.log("would merge", from, "into", into);
 }
-function checkout(into, from){
+function checkout(into){
     console.log("would checkout from", from, "into", into);
 }
