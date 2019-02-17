@@ -47,7 +47,7 @@ void Commit::addParent(std::shared_ptr<Commit> parent)
 {
 	if (parent->getID() == getID())
 	{
-		throw std::invalid_argument("Cannot add itself as a parent!");
+		throw "Cannot add itself as a parent!";
 	}
 
 	this->parents.push_back(parent);
