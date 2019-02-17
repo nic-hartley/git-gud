@@ -119,7 +119,7 @@ namespace git_gud
 
 			/** If it has the same ID twice, something is very wrong. */
 			std::vector<int> getAllCommitIDs() const;
-			
+
 			bool isValidCommitID(int id) const;
 			bool isValidBranchID(int id) const;
 
@@ -161,19 +161,19 @@ namespace git_gud
 			std::shared_ptr<Commit> addCommitNewBranch(int parentID);
 
 			/**
-			 * Sets the head of the tree.
+			 * Sets the head of the tree to the latest commit on the branch.
 			 *
-			 * @param commitID ID of the commit to set as the head.
-			 * @throws std::invalid_argument if commitID does not exist.
+			 * @param beanchID ID of the branch to checkout.
+			 * @throws std::invalid_argument if branchID does not exist.
 			 */
-			void checkout(int commitID);
+			void checkout(int branchID);
 
 			/**
-			 * Sets the head of the tree.
+			 * Sets the head of the tree to a specific commit.
 			 *
 			 * @param Commit to set.
 			 */
-			void checkout(std::shared_ptr<Commit> commit);
+			void checkoutCommit(int commit);
 
 			/**
 			 * Creates a new commit, appended to the head and with
