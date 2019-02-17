@@ -52,6 +52,7 @@ input:focus {
 
 #controls {
   border-top: 1px solid #FFB000;
+  padding-bottom: 0.25em;
 }
 
 #canvas, #controls {
