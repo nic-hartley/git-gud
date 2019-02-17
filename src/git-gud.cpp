@@ -6,46 +6,26 @@ extern "C" {
   extern void print(const char* message);
   extern void main_done();
   extern void set_relative_to(int x, int y);
-  extern void draw_commit_circle(int x, int y, const char* color);
+  extern void start_draw(int x, int y);
+  extern void draw_commit_circle(int ID, int x, int y, const char* color, bool isHead);
   extern void connect_circles(int tx, int ty, int bx, int by);
 }
 
 git_gud::GitTree tree;
 
 int main() {
-  print("starting main");
-  tree.addCommit();
-  tree.addCommit();
-  auto newBranch = tree.addCommitNewBranch();
-  tree.checkout(0);
-  tree.addCommit();
-  tree.checkout(newBranch->getBranch());
-  tree.addCommit();
-  tree.checkout(0);
-  tree.merge(1);
-  tree.addCommit();
-  tree.checkout(1);
-  tree.addCommitNewBranch();
-  tree.checkoutCommit(newBranch->getID());
-  tree.addCommitNewBranch();
-  tree.checkout(1);
-  tree.merge(3);
-  tree.checkout(0);
-  tree.merge(2);
-  print("main done");
   main_done();
 }
 
 extern "C" {
+
   EMSCRIPTEN_KEEPALIVE
   void draw() {
-    print("starting draw");
     auto head = tree.getHead();
-    set_relative_to(head->getBranch(), head->getID());
+    start_draw(head->getBranch(), head->getID());
     for (auto commit : tree.getAllCommits()) {
-      print("Drawing commit");
-      draw_commit_circle(commit->getBranch(), commit->getID(),
-        tree.isHead(commit->getID()) ? "green" : "red"
+      draw_commit_circle(commit->getID(),commit->getBranch(), commit->getID(),
+        "#85c1e9", tree.isHead(commit->getID())
       );
       for (auto parent : commit->getParents()) {
         connect_circles(
@@ -54,6 +34,41 @@ extern "C" {
         );
       }
     }
-    print("draw done");
+  }
+  
+  EMSCRIPTEN_KEEPALIVE
+  void init() {
+    print("init");
+    tree.reset();
+  }
+
+  EMSCRIPTEN_KEEPALIVE
+  void commit() {
+    print("commit");
+    tree.addCommit();
+  }
+
+  EMSCRIPTEN_KEEPALIVE
+  void branch() {
+    print("branch");
+    tree.branch();
+  }
+
+  EMSCRIPTEN_KEEPALIVE
+  void merge(int branch) {
+    print("merge");
+    tree.merge(branch);
+  }
+
+  EMSCRIPTEN_KEEPALIVE
+  void checkout_branch(int branch) {
+    print("checkout_branch");
+    tree.checkout(branch);
+  }
+
+  EMSCRIPTEN_KEEPALIVE
+  void checkout_commit(int commit) {
+    print("checkout_commit");
+    tree.checkoutCommit(commit);
   }
 }

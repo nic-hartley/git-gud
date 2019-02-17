@@ -14,7 +14,7 @@ body{
     vertical-align: top;
     font-size: 19px;
 }
-#locked-text{
+.locked-text{
     background-color: black;
     color: white;
     font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace; 
@@ -42,7 +42,4 @@ input:focus, select:focus, textarea:focus, button:focus {
 #canvas{
 /*    float: left;*/
 /*    clear: both;*/
-}
-input{
-    color: red;
 }

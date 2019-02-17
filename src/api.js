@@ -7,20 +7,47 @@ const ROW_HEIGHT = CIRCLE_RADIUS * 2 + VERT_MARGIN * 2;
 function centerX(x) { return x * COL_WIDTH + CIRCLE_RADIUS + HORIZ_MARGIN; }
 function centerY(y) { return y * ROW_HEIGHT + CIRCLE_RADIUS + VERT_MARGIN; }
 
-function init(){
-    console.log("would do an init");
+function init() {
+  Module._init();
+  Module._draw();
 }
+
 function commit() {
-  console.log("would do a commit");
+  Module._commit();
+  Module._draw();
 }
 
-function branch(name) {
-  console.log("would make new branch", name);
+function branch() {
+  Module._branch();
+  Module._draw();
 }
 
+<<<<<<< HEAD
 function merge(into) {
   console.log("would merge into", into);
 }
 function checkout(into){
     console.log("would checkout into", into);
+=======
+function merge(from) {
+  if (from[0] === 'c') {
+    throw new Error("Can only merge branches");
+  } else if (from[0] !== 'b') {
+    throw new Error("Specify a branch to merge");
+  } else {
+    Module._merge(parseInt(from.substr(1), 10));
+  }
+  Module._draw();
+}
+
+function checkout(branch) {
+  if (branch[0] === 'b') {
+    Module._checkout_branch(parseInt(branch.substr(1), 10));
+  } else if (branch[0] == 'c') {
+    Module._checkout_commit(parseInt(branch.substr(1), 10));
+  } else {
+    throw new Error("Specify a branch or commit to check out");
+  }
+  Module._draw();
+>>>>>>> f180766207a65edb412fab43b3b6934ba41b6286
 }

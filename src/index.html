@@ -11,11 +11,7 @@
     </canvas>
     <br />      
     <div id="history"></div><br />
-<!--    <form id="command-prompt" autocomplete="off" spellcheck="false">-->
       <span id="locked-text"> &gt;&nbsp;git&nbsp;</span><input autocomplete="off" spellcheck="false" autofocus="autofocus" type="text" maxlength="32" id="input-box-cmd" onkeypress="return noenter()" onKeyDown="if(event.keyCode==13) return hist()"/>
-<!--        <input type="submit" value="Go"/>-->
-<!--         <textarea name="Text1" cols="40" rows="5" value=" > git "></textarea> -->
-
     <script src="./git-gud.js"></script>
     <script src="./api.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -36,7 +32,6 @@
         }
         document.getElementById("input-box-cmd").value = "" ;
 
-//        console.log(x);
         if(i==0){
           document.getElementById("history").innerHTML = x ;  
         }
@@ -50,16 +45,9 @@
         }
         i=i+1;
                 
-//        console.log("i=" + i);
         document.getElementById("history").scrollTop = document.getElementById("history").scrollHeight ;
         action_process(x);
 
-//        if(i>5)
-//        {
-//            var old1 = document.getElementById("history");
-//            old1 = $('history').val().replace(/^.*\n/g,"");
-//            $('history').val(old1);
-//        }
 //        return false;
       }
       var flag=0;
@@ -68,7 +56,6 @@
           var text_hist = document.getElementById("history").innerHTML;
           var text="Invalid command entered";
           var warning_text="This action is not reversible, Do you want to proceed [y/n]"
-//          console.log(x_split);
           if(flag==1 || x_split[1] == "init"){
               if(flag==0){
               document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:yellow;'>" + warning_text + "</span>" ;
@@ -77,10 +64,10 @@
               flag=1;
               }
               if(x_split[0] == "y"){
-              init();
-              flag=0;
               document.getElementById("locked-text").innerHTML = "&gt;&nbsp;git&nbsp;";
               document.getElementById("input-box-cmd").style.width = "412px";
+              flag=0;
+              init();
               }
               if(x_split[0] == "n"){
               flag=0;
