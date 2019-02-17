@@ -21,6 +21,7 @@ function branch() {
   Module._branch();
   Module._draw();
 }
+
 function merge(from) {
   if (from[0] === 'c') {
     throw new Error("Can only merge branches");

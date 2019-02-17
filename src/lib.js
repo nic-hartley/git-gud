@@ -28,12 +28,12 @@ mergeInto(LibraryManager.library, {
     // Draw the commit ID in the center
     ctx.font = "10px Arial";
     ctx.fillStyle = "black"
-    var text = ID.toString();
+    var text = "c" + ID.toString();
     var leftOffset = ctx.measureText(text).width / 2;
     ctx.fillText(text, centerX(x) - leftOffset, centerY(y));
   },
   
-  connect_circles: function(topX, topY, botX, botY) {
+  connect_circles: function(topX, topY, botX, botY, isMerge) {
 
     ctx.beginPath();
     // move to middle bottom of first circle
@@ -48,25 +48,25 @@ mergeInto(LibraryManager.library, {
       ctx.stroke();
     }
 
-    // If botX is greater than topX, it's a branch, and the
-    // branch line should be near the top
-    else if (botX > topX) {
-      ctx.lineTo(centerX(topX), centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN/2));
+    // If botX is less than topX, it's a merge, and the line should
+    // be near the bottom
+    else if (isMerge) {
+      ctx.lineTo(centerX(topX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN));
       ctx.stroke();
-      ctx.lineTo(centerX(botX), centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN/2));
+      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN));
       ctx.stroke();
-      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS );
+      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
       ctx.stroke();
     }
 
-    // If botX is less than topX, it's a merge, and the line should
-    // be near the bottom
-    else {
-      ctx.lineTo(centerX(topX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN/2));
+    // If botX is greater than topX, it's a branch, and the
+    // branch line should be near the top
+    else if (botX > topX) {
+      ctx.lineTo(centerX(topX), centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN));
       ctx.stroke();
-      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN/2));
+      ctx.lineTo(centerX(botX), centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN));
       ctx.stroke();
-      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
+      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS );
       ctx.stroke();
     }
   },
@@ -85,13 +85,14 @@ mergeInto(LibraryManager.library, {
 
       // Fill in the current column
       if (i == current) {
-        ctx.fillRect(xpos, 0, COL_WIDTH, canvas.height);
+        ctx.fillStyle = "#AAAAAAAA"
+        ctx.fillRect(COL_WIDTH * i, 0, COL_WIDTH, canvas.height);
       }
 
       // Draw the branch ID in the center
       ctx.font = "10px Arial";
       ctx.fillStyle = "black";
-      var text = i.toString();
+      var text = "b" + i.toString();
       var leftOffset = ctx.measureText(text).width / 2;
       ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH/2 - leftOffset,10);
     }
