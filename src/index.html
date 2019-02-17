@@ -64,54 +64,58 @@
           var text_hist = document.getElementById("history").innerHTML;
           var text="Invalid command entered";
           var warning_text="This action is not reversible, Do you want to proceed [y/n]"
-          if(flag==1 || x_split[1] == "init"){
-              if(flag==0){
-              document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:yellow;'>" + warning_text + "</span>" ;
-              document.getElementById("locked-text").innerHTML = "[y/n]";
-              document.getElementById("input-box-cmd").style.width = "424px";
-              bad=1;
-              }
-              if(flag!=0){
+          try {
+              if(flag==1 || x_split[1] == "init"){
+                  if(flag==0){
+                  document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:yellow;'>" + warning_text + "</span>" ;
+                  document.getElementById("locked-text").innerHTML = "[y/n]";
+                  document.getElementById("input-box-cmd").style.width = "424px";
+                  bad=1;
+                  }
+                  if(flag!=0){
+                      bad=0;
+                  }
+                  flag=1;
+                  console.log(x_split);
+                  if(x_split[0] == "y"){
+                  document.getElementById("locked-text").innerHTML = "&gt;&nbsp;git&nbsp;";
+                  document.getElementById("input-box-cmd").style.width = "412px";
+                  flag=0;
                   bad=0;
+                  init();
+                  }
+                  else if(x_split[0] == "n"){
+                  flag=0;
+                  bad=0;
+                  document.getElementById("locked-text").innerHTML = "&gt;&nbsp;git&nbsp;";
+                  document.getElementById("input-box-cmd").style.width = "412px";
+                  }
+                  else if(bad==0 && (x_split[0]!="y" || x_split[0]!="n")){
+                  document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:yellow;'>" + "Please enter a valid choice" + "</span>" ;
+                  bad=1;
+                  }
+                  
               }
-              flag=1;
-              console.log(x_split);
-              if(x_split[0] == "y"){
-              document.getElementById("locked-text").innerHTML = "&gt;&nbsp;git&nbsp;";
-              document.getElementById("input-box-cmd").style.width = "412px";
-              flag=0;
-              bad=0;
-              init();
+              else if(x_split[1] == "commit" && x_split[2]==null){
+                  commit();
               }
-              else if(x_split[0] == "n"){
-              flag=0;
-              bad=0;
-              document.getElementById("locked-text").innerHTML = "&gt;&nbsp;git&nbsp;";
-              document.getElementById("input-box-cmd").style.width = "412px";
+              else if(x_split[1] == "branch" && x_split[2]==null){
+                  branch();
               }
-              else if(bad==0 && (x_split[0]!="y" || x_split[0]!="n")){
-              document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:yellow;'>" + "Please enter a valid choice" + "</span>" ;
-              bad=1;
+              else if(x_split[1] == "merge" && x_split[2]!=null){
+                  merge(x_split[2]);
               }
-              
+              else if(x_split[1] == "checkout" && x_split[2]!=null){
+                  checkout(x_split[2]);
+              }
+              else{
+                  document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:red;'>" + text + "</span>" ;
+              }
+              document.getElementById("history").scrollTop = document.getElementById("history").scrollHeight ;
+          } catch (e) {
+            console.log("Type: " + typeof(e));
+            console.log("Message:", e);
           }
-          else if(x_split[1] == "commit" && x_split[2]==null){
-              commit();
-          }
-          else if(x_split[1] == "branch" && x_split[2]==null){
-              branch();
-          }
-          else if(x_split[1] == "merge" && x_split[2]!=null){
-              merge(x_split[2]);
-          }
-          else if(x_split[1] == "checkout" && x_split[2]!=null){
-              checkout(x_split[2]);
-          }
-          else{
-              document.getElementById("history").innerHTML = text_hist + "<br />" + "<span style='color:red;'>" + text + "</span>" ;
-          }
-          document.getElementById("history").scrollTop = document.getElementById("history").scrollHeight ;
-
       }
     </script>
   </body>
