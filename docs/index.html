@@ -10,8 +10,8 @@
       Get a real browser!
     </canvas>
     <br />      
-    <div id="history"></div><br />
-      <span id="locked-text"> &gt;&nbsp;git&nbsp;</span><input autocomplete="off" spellcheck="false" autofocus="autofocus" type="text" maxlength="32" id="input-box-cmd" onkeypress="return noenter()" onKeyDown="if(event.keyCode==13) return hist()"/>
+    <div id="history" onclick="document.getElementById('input-box-cmd').focus(); return false;"></div><br />
+      <span id="locked-text"> &gt;&nbsp;git&nbsp;</span><input autocomplete="off" spellcheck="false" autofocus="autofocus" type="text" maxlength="32" id="input-box-cmd" onkeypress="return noenter()" onKeyDown="if(event.keyCode==13) return hist(); if(event.keycode == 40) return down_arrow()" />
     <script src="./git-gud.js"></script>
     <script src="./api.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -22,7 +22,10 @@
       function noenter() {
         return !(window.event && window.event.keyCode == 13); 
       }
+      var commands = [];
       function hist(){
+        commands.push(document.getElementById("input-box-cmd").value);
+        console.log(commands);
         var old = document.getElementById("history").innerHTML;
         var x;
         if(flag==1 && (document.getElementById("input-box-cmd").value=="y" || document.getElementById("input-box-cmd").value=="n")){
