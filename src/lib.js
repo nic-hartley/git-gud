@@ -28,7 +28,7 @@ mergeInto(LibraryManager.library, {
     // Draw the commit ID in the center
     ctx.font = "10px Arial";
     ctx.fillStyle = "black"
-    var text = ID.toString();
+    var text = "c" + ID.toString();
     var leftOffset = ctx.measureText(text).width / 2;
     ctx.fillText(text, centerX(x) - leftOffset, centerY(y));
   },
@@ -92,7 +92,7 @@ mergeInto(LibraryManager.library, {
       // Draw the branch ID in the center
       ctx.font = "10px Arial";
       ctx.fillStyle = "black";
-      var text = i.toString();
+      var text = "b" + i.toString();
       var leftOffset = ctx.measureText(text).width / 2;
       ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH/2 - leftOffset,10);
     }
