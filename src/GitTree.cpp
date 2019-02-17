@@ -1,5 +1,7 @@
 #include "git-gud.hpp"
 
+#include <string>
+#include <sstream>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -34,7 +36,9 @@ std::shared_ptr<Commit> GitTree::getCommit(int ID) const
 	}
 
 	// The ID didn't exist!
-	throw std::invalid_argument("ID not found!");
+	std::ostringstream msg;
+	msg << "ID " << ID << " not found!";
+	throw std::invalid_argument(msg.str());
 }
 
 std::shared_ptr<Commit> GitTree::getHead() const
@@ -59,18 +63,13 @@ std::shared_ptr<Commit> GitTree::getLatest(int branchID) const
 		}
 	}
 
-	if (latest!=NULL) {
-		std::cout << "printing\n";
-		latest->print();
-	}
-
-	else if (latest == NULL)
+	if (latest == NULL)
 	{
-		std::cout << "Throwing\n";
-		throw std::invalid_argument("Branch does not exist!");
+		std::ostringstream msg;
+		msg << "Branch " << branchID << " not found!";
+		throw std::invalid_argument(msg.str());
 	}
 
-	std::cout << "Returning\n";
 	return latest;
 }
 
@@ -159,8 +158,9 @@ std::shared_ptr<Commit> GitTree::addCommit(int parentID)
 	commit->addParent(parent);
 	parent->addChild(commit);
 
-	checkout(commit->getID());
+
 	this->commits.push_back(commit);
+	checkoutCommit(commit->getID());
 
 	return commit;
 }
@@ -179,9 +179,9 @@ std::shared_ptr<Commit> GitTree::addCommitNewBranch(int parentID)
 	commit->addParent(parent);
 	parent->addChild(commit);
 
-	checkout(commit->getID());
 	this->commits.push_back(commit);
 	this->numBranches++;
+	checkoutCommit(commit->getID());
 
 	return commit;
 }
@@ -217,7 +217,7 @@ std::shared_ptr<Commit> GitTree::merge(int parent1ID, int parent2ID)
 void GitTree::checkout(int branchID)
 {
 	// getLatest() will throw invalid_argument if not found
-	checkout(getLatest(branchID)->getID());
+	checkoutCommit(getLatest(branchID)->getID());
 }
 
 void GitTree::checkoutCommit(int commit)
