@@ -6,12 +6,15 @@ mergeInto(LibraryManager.library, {
 
     ctx.beginPath();
     ctx.strokeStyle = AMBER;
+    ctx.setLineDash([5, 3]);/*dashes are 5px and spaces are 3px*/
     ctx.lineWidth = 1;
 
     ctx.moveTo(COL_WIDTH * currentCol, 0);
     ctx.lineTo(COL_WIDTH * currentCol, canvas.height);
     ctx.moveTo(COL_WIDTH * (currentCol+1), 0);
     ctx.lineTo(COL_WIDTH * (currentCol+1), canvas.height);
+    ctx.stroke();
+    ctx.setLineDash([]);
 
     /* Draws all columns lines
     ctx.moveTo(0, 0);
@@ -23,7 +26,6 @@ mergeInto(LibraryManager.library, {
     }
     */
     // stroke dividing lines
-    ctx.stroke();
 
     ctx.save();
     ctx.resetTransform();
