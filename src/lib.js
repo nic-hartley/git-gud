@@ -117,11 +117,11 @@ mergeInto(LibraryManager.library, {
     ctx.restore(); // vertical shift + clip
     for (let i = 0; i < numColumns; ++i) {
       // Draw the branch ID in the center
-      ctx.font = "bold 14px monospace";
+      ctx.font = "bold 14px monospace"; 
       let text = "b" + i.toString();
       let leftOffset = ctx.measureText(text).width / 2;
       ctx.fillStyle = AMBER;
-      ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH / 2 - leftOffset, 10);
+      ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH / 2 - leftOffset, 12);
     }
 
     ctx.beginPath();
