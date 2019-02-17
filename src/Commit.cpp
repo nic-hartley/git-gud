@@ -12,18 +12,6 @@ Commit::Commit(int branchID, int commitID)
 	this->branchID = branchID;
 }
 
-Commit::Commit(int branchID)
-{
-	this->commitID = generateID();
-	this->branchID = branchID;
-}
-
-int Commit::generateID()
-{
-	static int id = 0;
-	return id++;
-}
-
 int Commit::getID() const {return this->commitID;}
 int Commit::getBranch() const {return this->branchID;}
 int Commit::getNumParents() const {return this->parents.size();}

@@ -59,7 +59,7 @@ int main (void)
 
 
 	std::cout << "Merging branch 3\n";
-	tree.merge(3);
+	tree.merge(1);
 	tree.print();
 
 	std::cout << "Undoing the merge\n";
