@@ -130,6 +130,12 @@ bool GitTree::isValidCommitID(int id) const
 }
 
 std::shared_ptr<Commit> GitTree::addCommit() {
+  for (auto child : this->head->getChildren()) {
+    if (child->getBranch() == this->currentBranch) {
+      throw std::invalid_argument("cannot make second child on same branch");
+    }
+  }
+
   auto commit = std::make_shared<Commit>(this->currentBranch, nextCommitID++);
 
   this->head->addChild(commit);
@@ -181,6 +187,7 @@ int GitTree::branch() {
 void GitTree::checkoutCommit(int commit)
 {
 	this->head = getCommit(commit);
+  this->currentBranch = this->head->getBranch();
 }
 
 void GitTree::undo()

@@ -72,8 +72,8 @@ mergeInto(LibraryManager.library, {
     }
   },
 
-  set_relative_to: function(x, y) {
-    // ctx.translate(centerX(x), centerY(y));
+  start_draw: function(x, y) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   },
 
   main_done: function() {
