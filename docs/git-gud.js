@@ -5038,6 +5038,32 @@ function copyTempDouble(ptr) {
       }
     }
 
+  function _draw_columns(numColumns, current) {
+  
+      ctx.beginPath();
+      ctx.strokeStyle = "gray";
+      ctx.lineWidth = 1;
+  
+      for (var i = 0; i < numColumns; i++) {
+        var xpos = COL_WIDTH * (i+1);
+        ctx.moveTo(xpos, 0);
+        ctx.lineTo(xpos, canvas.height);
+        ctx.stroke();
+  
+        // Fill in the current column
+        if (i == current) {
+          ctx.fillRect(xpos, 0, COL_WIDTH, canvas.height);
+        }
+  
+        // Draw the branch ID in the center
+        ctx.font = "10px Arial";
+        ctx.fillStyle = "black";
+        var text = i.toString();
+        var leftOffset = ctx.measureText(text).width / 2;
+        ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH/2 - leftOffset,10);
+      }
+    }
+
   function _draw_commit_circle(ID, x, y, color, isHead) {
   
       if (!isHead) {
@@ -5066,8 +5092,7 @@ function copyTempDouble(ptr) {
   
       // Draw the commit ID in the center
       ctx.font = "10px Arial";
-      ctx.fillStyle = "black";
-      //var text = ID.toString();
+      ctx.fillStyle = "black"
       var text = ID.toString();
       var leftOffset = ctx.measureText(text).width / 2;
       ctx.fillText(text, centerX(x) - leftOffset, centerY(y));
@@ -5082,6 +5107,10 @@ function copyTempDouble(ptr) {
       abort('Cannot enlarge memory arrays to size ' + requestedSize + ' bytes. Either (1) compile with  -s TOTAL_MEMORY=X  with X higher than the current value ' + TOTAL_MEMORY + ', (2) compile with  -s ALLOW_MEMORY_GROWTH=1  which allows increasing the size at runtime, or (3) if you want malloc to return NULL (0) instead of this abort, compile with  -s ABORTING_MALLOC=0 ');
     }function _emscripten_resize_heap(requestedSize) {
       abortOnCannotGrowMemory(requestedSize);
+    }
+
+  function _end_draw() {
+      ctx.restore();
     }
 
   
@@ -5152,6 +5181,7 @@ function copyTempDouble(ptr) {
 
   function _start_draw(x, y) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
     }
 
   
@@ -5495,6 +5525,10 @@ function copyTempDouble(ptr) {
     }function _strftime_l(s, maxsize, format, tm) {
       return _strftime(s, maxsize, format, tm); // no locale support yet
     }
+
+  function _translate(x, y) {
+      ctx.translate(x, y);
+    }
 FS.staticInit();__ATINIT__.unshift(function() { if (!Module["noFSInit"] && !FS.init.initialized) FS.init() });__ATMAIN__.push(function() { FS.ignorePermissions = false });__ATEXIT__.push(function() { FS.quit() });;
 __ATINIT__.unshift(function() { TTY.init() });__ATEXIT__.push(function() { TTY.shutdown() });;
 if (ENVIRONMENT_IS_NODE) { var fs = require("fs"); var NODEJS_PATH = require("path"); NODEFS.staticInit(); };
@@ -5573,7 +5607,7 @@ function nullFunc_viijii(x) { err("Invalid function pointer called with signatur
 
 var asmGlobalArg = {}
 
-var asmLibraryArg = { "abort": abort, "setTempRet0": setTempRet0, "getTempRet0": getTempRet0, "abortStackOverflow": abortStackOverflow, "nullFunc_ii": nullFunc_ii, "nullFunc_iii": nullFunc_iii, "nullFunc_iiii": nullFunc_iiii, "nullFunc_iiiii": nullFunc_iiiii, "nullFunc_iiiiid": nullFunc_iiiiid, "nullFunc_iiiiii": nullFunc_iiiiii, "nullFunc_iiiiiid": nullFunc_iiiiiid, "nullFunc_iiiiiii": nullFunc_iiiiiii, "nullFunc_iiiiiiii": nullFunc_iiiiiiii, "nullFunc_iiiiiiiii": nullFunc_iiiiiiiii, "nullFunc_iiiiij": nullFunc_iiiiij, "nullFunc_v": nullFunc_v, "nullFunc_vi": nullFunc_vi, "nullFunc_vii": nullFunc_vii, "nullFunc_viii": nullFunc_viii, "nullFunc_viiii": nullFunc_viiii, "nullFunc_viiiii": nullFunc_viiiii, "nullFunc_viiiiii": nullFunc_viiiiii, "nullFunc_viijii": nullFunc_viijii, "___cxa_allocate_exception": ___cxa_allocate_exception, "___cxa_find_matching_catch": ___cxa_find_matching_catch, "___cxa_free_exception": ___cxa_free_exception, "___cxa_pure_virtual": ___cxa_pure_virtual, "___cxa_throw": ___cxa_throw, "___cxa_uncaught_exception": ___cxa_uncaught_exception, "___gxx_personality_v0": ___gxx_personality_v0, "___lock": ___lock, "___map_file": ___map_file, "___resumeException": ___resumeException, "___setErrNo": ___setErrNo, "___syscall140": ___syscall140, "___syscall145": ___syscall145, "___syscall146": ___syscall146, "___syscall54": ___syscall54, "___syscall6": ___syscall6, "___syscall91": ___syscall91, "___unlock": ___unlock, "__addDays": __addDays, "__arraySum": __arraySum, "__isLeapYear": __isLeapYear, "_abort": _abort, "_connect_circles": _connect_circles, "_draw_commit_circle": _draw_commit_circle, "_emscripten_get_heap_size": _emscripten_get_heap_size, "_emscripten_memcpy_big": _emscripten_memcpy_big, "_emscripten_resize_heap": _emscripten_resize_heap, "_getenv": _getenv, "_llvm_stackrestore": _llvm_stackrestore, "_llvm_stacksave": _llvm_stacksave, "_llvm_trap": _llvm_trap, "_main_done": _main_done, "_print": _print, "_pthread_cond_wait": _pthread_cond_wait, "_start_draw": _start_draw, "_strftime": _strftime, "_strftime_l": _strftime_l, "abortOnCannotGrowMemory": abortOnCannotGrowMemory, "tempDoublePtr": tempDoublePtr, "DYNAMICTOP_PTR": DYNAMICTOP_PTR }
+var asmLibraryArg = { "abort": abort, "setTempRet0": setTempRet0, "getTempRet0": getTempRet0, "abortStackOverflow": abortStackOverflow, "nullFunc_ii": nullFunc_ii, "nullFunc_iii": nullFunc_iii, "nullFunc_iiii": nullFunc_iiii, "nullFunc_iiiii": nullFunc_iiiii, "nullFunc_iiiiid": nullFunc_iiiiid, "nullFunc_iiiiii": nullFunc_iiiiii, "nullFunc_iiiiiid": nullFunc_iiiiiid, "nullFunc_iiiiiii": nullFunc_iiiiiii, "nullFunc_iiiiiiii": nullFunc_iiiiiiii, "nullFunc_iiiiiiiii": nullFunc_iiiiiiiii, "nullFunc_iiiiij": nullFunc_iiiiij, "nullFunc_v": nullFunc_v, "nullFunc_vi": nullFunc_vi, "nullFunc_vii": nullFunc_vii, "nullFunc_viii": nullFunc_viii, "nullFunc_viiii": nullFunc_viiii, "nullFunc_viiiii": nullFunc_viiiii, "nullFunc_viiiiii": nullFunc_viiiiii, "nullFunc_viijii": nullFunc_viijii, "___cxa_allocate_exception": ___cxa_allocate_exception, "___cxa_find_matching_catch": ___cxa_find_matching_catch, "___cxa_free_exception": ___cxa_free_exception, "___cxa_pure_virtual": ___cxa_pure_virtual, "___cxa_throw": ___cxa_throw, "___cxa_uncaught_exception": ___cxa_uncaught_exception, "___gxx_personality_v0": ___gxx_personality_v0, "___lock": ___lock, "___map_file": ___map_file, "___resumeException": ___resumeException, "___setErrNo": ___setErrNo, "___syscall140": ___syscall140, "___syscall145": ___syscall145, "___syscall146": ___syscall146, "___syscall54": ___syscall54, "___syscall6": ___syscall6, "___syscall91": ___syscall91, "___unlock": ___unlock, "__addDays": __addDays, "__arraySum": __arraySum, "__isLeapYear": __isLeapYear, "_abort": _abort, "_connect_circles": _connect_circles, "_draw_columns": _draw_columns, "_draw_commit_circle": _draw_commit_circle, "_emscripten_get_heap_size": _emscripten_get_heap_size, "_emscripten_memcpy_big": _emscripten_memcpy_big, "_emscripten_resize_heap": _emscripten_resize_heap, "_end_draw": _end_draw, "_getenv": _getenv, "_llvm_stackrestore": _llvm_stackrestore, "_llvm_stacksave": _llvm_stacksave, "_llvm_trap": _llvm_trap, "_main_done": _main_done, "_print": _print, "_pthread_cond_wait": _pthread_cond_wait, "_start_draw": _start_draw, "_strftime": _strftime, "_strftime_l": _strftime_l, "_translate": _translate, "abortOnCannotGrowMemory": abortOnCannotGrowMemory, "tempDoublePtr": tempDoublePtr, "DYNAMICTOP_PTR": DYNAMICTOP_PTR }
 // EMSCRIPTEN_START_ASM
 var asm =Module["asm"]// EMSCRIPTEN_END_ASM
 (asmGlobalArg, asmLibraryArg, buffer);
