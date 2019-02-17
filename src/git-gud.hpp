@@ -97,15 +97,17 @@ namespace git_gud
 			int nextBranchID = 0;
 
 			std::shared_ptr<Commit> head;
-      int currentBranch = 0;
+      int currentBranch;
 			std::vector<std::shared_ptr<Commit> > commits;
-			int numBranches = 1;
+      std::vector<std::shared_ptr<Commit> > branch_heads;
+			int numBranches;
 
 		public:
 
 			GitTree();
 
 			std::shared_ptr<Commit> getHead() const;
+      int getCurrentBranch() const;
 			bool isHead(int commitID) const;
 			std::shared_ptr<Commit> getCommit(int ID) const;
 			std::shared_ptr<Commit> getLatest() const;
