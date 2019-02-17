@@ -1,18 +1,7 @@
 mergeInto(LibraryManager.library, {
   draw_commit_circle: function(ID, x, y, color, isHead) {
 
-    if (!isHead) {
-      ctx.beginPath();
-      ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS, 0, 2 * Math.PI);
-      ctx.strokeStyle = "black";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.fillStyle = UTF8ToString(color, 8);
-      ctx.fill();
-    }
-
-    // Head commit have an additonal ring around them
-    else {
+    if (isHead) {
       ctx.beginPath();
       ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS*0.75, 0, 2*Math.PI);
       ctx.fillStyle = UTF8ToString(color, 8);
@@ -23,6 +12,14 @@ mergeInto(LibraryManager.library, {
       ctx.stokeStyle = "black";
       ctx.lineWidth = 3;
       ctx.stroke();
+    } else {
+      ctx.beginPath();
+      ctx.arc(centerX(x), centerY(y), CIRCLE_RADIUS, 0, 2 * Math.PI);
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = UTF8ToString(color, 8);
+      ctx.fill();
     }
 
     // Draw the commit ID in the center
@@ -48,25 +45,81 @@ mergeInto(LibraryManager.library, {
       ctx.stroke();
     }
 
-    // If botX is less than topX, it's a merge, and the line should
-    // be near the bottom
-    else if (isMerge) {
-      ctx.lineTo(centerX(topX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN));
+    // Merge to the right
+    else if (isMerge && botX > topX) {
+      ctx.lineTo(centerX(topX), centerY(botY) - CIRCLE_RADIUS - VERT_MARGIN - LINE_ARC_RADIUS);
       ctx.stroke();
-      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN));
+
+      ctx.arc(centerX(topX) + LINE_ARC_RADIUS,
+              centerY(botY) - CIRCLE_RADIUS - VERT_MARGIN - LINE_ARC_RADIUS,
+              LINE_ARC_RADIUS,
+              Math.PI,
+              Math.PI/2,
+              true);
       ctx.stroke();
+
+      ctx.lineTo(centerX(botX) - LINE_ARC_RADIUS,
+                 centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN));
+      ctx.stroke();
+      ctx.arc(centerX(botX) - LINE_ARC_RADIUS,
+              centerY(botY) - CIRCLE_RADIUS - LINE_ARC_RADIUS,
+              LINE_ARC_RADIUS,
+              1.5*Math.PI,
+              0);
+      ctx.stroke();
+
       ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
+    }
+
+    // Merge to the left
+    else if (isMerge && botX < topX) {
+      ctx.lineTo(centerX(topX), centerY(botY) - CIRCLE_RADIUS - VERT_MARGIN - LINE_ARC_RADIUS);
       ctx.stroke();
+
+      ctx.arc(centerX(topX) - LINE_ARC_RADIUS,
+              centerY(botY) - CIRCLE_RADIUS - VERT_MARGIN - LINE_ARC_RADIUS,
+              LINE_ARC_RADIUS,
+              0,
+              Math.PI/2);
+      ctx.stroke();
+
+      ctx.lineTo(centerX(botX) + LINE_ARC_RADIUS,
+                 centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN));
+      ctx.stroke();
+      ctx.arc(centerX(botX) + LINE_ARC_RADIUS,
+              centerY(botY) - CIRCLE_RADIUS - LINE_ARC_RADIUS,
+              LINE_ARC_RADIUS,
+              1.5*Math.PI,
+              Math.PI,
+              true);
+      ctx.stroke();
+
+      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
     }
 
     // If botX is greater than topX, it's a branch, and the
     // branch line should be near the top
     else if (botX > topX) {
-      ctx.lineTo(centerX(topX), centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN));
+      ctx.lineTo(centerX(topX), centerX(topY) + CIRCLE_RADIUS + LINE_ARC_RADIUS);
       ctx.stroke();
-      ctx.lineTo(centerX(botX), centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN));
+      ctx.arc(centerX(topX) + LINE_ARC_RADIUS,
+              centerY(topY) + CIRCLE_RADIUS + LINE_ARC_RADIUS,
+              LINE_ARC_RADIUS,
+              Math.PI,
+              Math.PI/2,
+              true); // counterclockwise
       ctx.stroke();
-      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS );
+
+      ctx.lineTo(centerX(botX) - LINE_ARC_RADIUS, centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN));
+      ctx.stroke();
+      ctx.arc(centerX(botX)-LINE_ARC_RADIUS,
+              centerY(topY) + CIRCLE_RADIUS + VERT_MARGIN + LINE_ARC_RADIUS,
+              LINE_ARC_RADIUS,
+              1.5*Math.PI,
+              0);
+      ctx.stroke();
+
+      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
       ctx.stroke();
     }
   },

@@ -29,12 +29,17 @@ extern "C" {
     draw_columns(tree.getNumBranches(), tree.getCurrentBranch());
     translate(0, 10);
     for (auto commit : tree.getAllCommits()) {
-      if (commit->isMergeCommit()) {
-        commit->print();
+
+      if (!tree.isHead(commit->getID())) {
+        draw_commit_circle(commit->getID(),commit->getBranch(), commit->getID(),
+          "#85c1e9", false);
       }
-      draw_commit_circle(commit->getID(),commit->getBranch(), commit->getID(),
-        "#85c1e9", tree.isHead(commit->getID())
-      );
+
+      else {
+        draw_commit_circle(commit->getID(),commit->getBranch(), commit->getID(),
+          "#00FF00", true);
+      }
+
       for (auto parent : commit->getParents()) {
         connect_circles(
           parent->getBranch(), parent->getID(),

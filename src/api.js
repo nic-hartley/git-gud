@@ -1,8 +1,9 @@
 const CIRCLE_RADIUS = 15;
 const HORIZ_MARGIN = CIRCLE_RADIUS / 2;
-const VERT_MARGIN = CIRCLE_RADIUS / 4;
+const VERT_MARGIN = CIRCLE_RADIUS / 2;
 const COL_WIDTH = CIRCLE_RADIUS * 2 + HORIZ_MARGIN * 2;
 const ROW_HEIGHT = CIRCLE_RADIUS * 2 + VERT_MARGIN * 2;
+const LINE_ARC_RADIUS = VERT_MARGIN/2;
 
 function centerX(x) { return x * COL_WIDTH + CIRCLE_RADIUS + HORIZ_MARGIN; }
 function centerY(y) { return y * ROW_HEIGHT + CIRCLE_RADIUS + VERT_MARGIN; }
@@ -21,10 +22,7 @@ function branch() {
   Module._branch();
   Module._draw();
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> 7c94fb5c97bc78a1f15654052693115d0eb92750
 function merge(from) {
   if (from[0] === 'c') {
     throw new Error("Can only merge branches");
