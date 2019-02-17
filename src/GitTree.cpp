@@ -255,6 +255,18 @@ void GitTree::undo()
 	nextCommitID--;
 }
 
+void GitTree::reset()
+{
+	this->commits.clear();
+	this->nextCommitID = 0;
+	this->nextBranchID = 0;
+
+	auto firstCommit = std::make_shared<Commit>(nextBranchID++, nextCommitID++);
+	this->commits.push_back(firstCommit);
+	this->head = firstCommit;
+	this->numBranches = 1;
+}
+
 void GitTree::print() const
 {
 	std::cout << "...\n";
