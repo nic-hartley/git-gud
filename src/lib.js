@@ -27,18 +27,41 @@ mergeInto(LibraryManager.library, {
   },
   
   connect_circles: function(topX, topY, botX, botY) {
+
     ctx.beginPath();
     // move to middle bottom of first circle
     ctx.moveTo(centerX(topX), centerY(topY) + CIRCLE_RADIUS);
-    // do a pretty arc to the top of the last circle
-    ctx.bezierCurveTo(
-      centerX(topX), centerY(botY) - CIRCLE_RADIUS,
-      centerX(botX), centerY(topY) + CIRCLE_RADIUS + VERT_MARGIN,
-      centerX(botX), centerY(botY) - CIRCLE_RADIUS
-    );
+
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 2;
-    ctx.stroke();
+
+    // If botX == botY, it's a straight line
+    if (botX == topX) {
+      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
+      ctx.stroke();
+    }
+
+    // If botX is greater than topX, it's a branch, and the
+    // branch line should be near the top
+    else if (botX > topX) {
+      ctx.lineTo(centerX(topX), centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN/2));
+      ctx.stroke();
+      ctx.lineTo(centerX(botX), centerY(topY) + CIRCLE_RADIUS + (VERT_MARGIN/2));
+      ctx.stroke();
+      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS );
+      ctx.stroke();
+    }
+
+    // If botX is less than topX, it's a merge, and the line should
+    // be near the bottom
+    else {
+      ctx.lineTo(centerX(topX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN/2));
+      ctx.stroke();
+      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS - (VERT_MARGIN/2));
+      ctx.stroke();
+      ctx.lineTo(centerX(botX), centerY(botY) - CIRCLE_RADIUS);
+      ctx.stroke();
+    }
   },
 
   set_relative_to: function(x, y) {
