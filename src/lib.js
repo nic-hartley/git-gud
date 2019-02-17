@@ -121,7 +121,7 @@ mergeInto(LibraryManager.library, {
       let text = "b" + i.toString();
       let leftOffset = ctx.measureText(text).width / 2;
       ctx.fillStyle = AMBER;
-      ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH / 2 - leftOffset, 12);
+      ctx.fillText(text, (COL_WIDTH * i) + COL_WIDTH / 2 - leftOffset, 14);
     }
 
     ctx.beginPath();
@@ -129,8 +129,8 @@ mergeInto(LibraryManager.library, {
     ctx.setLineDash([5, 3]);/*dashes are 5px and spaces are 3px*/
     ctx.lineWidth = 1;
 
-    ctx.moveTo(0, 16);
-    ctx.lineTo(COL_WIDTH * numColumns, 16);
+    ctx.moveTo(0, 18);
+    ctx.lineTo(COL_WIDTH * numColumns, 18);
     ctx.stroke();
     ctx.setLineDash([]);
     ctx.restore(); // horizontal shift
